@@ -1,48 +1,71 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import UserStatus from './UserStatus';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Button, Popover } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
-function Header({ isLoggedIn }) {
+function Header({ isLoggedIn, onLogout }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    onLogout();
+    handleClose();
+    navigate('/');
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   return (
-    <header style={{
-      position: 'sticky',
-      top: 0,
-      backgroundColor: '#f8f9fa',
-      padding: '10px 0',
-      boxShadow: '0 2px 4px rgba(0,0,0,.1)'
-    }}>
-      <nav style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 20px'
-      }}>
-        <ul style={{
-          listStyle: 'none',
-          display: 'flex',
-          gap: '20px',
-          margin: 0,
-          padding: 0
-        }}>
-          {!isLoggedIn && (
-            <>
-              <li><Link to="/">Login</Link></li>
-              <li><Link to="/register">Register</Link></li>
-            </>
-          )}
-          {isLoggedIn && (
-            <>
-              <li><Link to="/dashboard">Dashboard</Link></li>
-              <li><Link to="/chores">Chores</Link></li>
-              <li><Link to="/add-chore">Add Chore</Link></li>
-            </>
-          )}
-        </ul>
-        <UserStatus isLoggedIn={isLoggedIn} />
-      </nav>
-    </header>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Chores App
+        </Typography>
+        {isLoggedIn ? (
+          <>
+            <Button color="inherit" onClick={handleClick}>
+              Logged In
+            </Button>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <Button onClick={handleLogout} sx={{ p: 2 }}>
+                Log Out
+              </Button>
+            </Popover>
+          </>
+        ) : (
+          <>
+            <Button color="inherit" component={RouterLink} to="/login">
+              Login
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/register">
+              Register
+            </Button>
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }
 
