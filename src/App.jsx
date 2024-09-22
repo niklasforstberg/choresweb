@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Container, Box } from '@mui/material';
 import Header from './components/Header';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -14,16 +15,16 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header isLoggedIn={isLoggedIn} />
-        <main style={{ padding: '20px' }}>
+        <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
           </Routes>
-        </main>
-      </div>
+        </Container>
+      </Box>
     </Router>
   );
 }
