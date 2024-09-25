@@ -3,17 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
 
+// Login component for user authentication
 function Login({ onLoginSuccess }) {
+  // State for form inputs and error handling
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
       console.log('Attempting to log in with:', { email, password });
+      // Send login request to the API
       const response = await axiosInstance.post('api/security/login', { 
         email, 
         password,
@@ -22,6 +26,7 @@ function Login({ onLoginSuccess }) {
       console.log('Login response:', response);
       
       if (response.data) {
+        // Store the token and update login status
         localStorage.setItem('token', response.data);
         console.log('Token stored in localStorage');
         onLoginSuccess();
@@ -50,6 +55,7 @@ function Login({ onLoginSuccess }) {
         </Typography>
         {error && <Typography color="error">{error}</Typography>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {/* Email input field */}
           <TextField
             margin="normal"
             required
@@ -62,6 +68,7 @@ function Login({ onLoginSuccess }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {/* Password input field */}
           <TextField
             margin="normal"
             required
@@ -74,6 +81,7 @@ function Login({ onLoginSuccess }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Submit button */}
           <Button
             type="submit"
             fullWidth

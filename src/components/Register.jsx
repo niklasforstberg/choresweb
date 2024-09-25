@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
 
+// Register component for user registration
 function Register() {
+  // State for form inputs and error handling
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
+      // Send registration request to the API
       const response = await axiosInstance.post('api/security/register', { 
         email, 
         password,
@@ -19,6 +23,7 @@ function Register() {
       });
       console.log('Registration response:', response);
       if (response.data) {
+        // Store the token and redirect to dashboard
         localStorage.setItem('token', response.data);
         navigate('/dashboard');
       } else {
