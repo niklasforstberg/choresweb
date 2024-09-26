@@ -26,9 +26,10 @@ function Login({ onLoginSuccess }) {
       console.log('Login response:', response);
       
       if (response.data) {
-        // Store the token and update login status
-        localStorage.setItem('token', response.data);
-        console.log('Token stored in localStorage');
+        // Store the token and user ID
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+        console.log('Token and userId stored in localStorage');
         onLoginSuccess();
         navigate('/dashboard');
       } else {

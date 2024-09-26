@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
-
 
 function CreateFamily() {
   const [familyName, setFamilyName] = useState('');
   const [error, setError] = useState('');
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!userId) {
+      setError('User ID not found. Please log in again.');
+      return;
+    }
     try {
       // Create the family
       const familyResponse = await axiosInstance.post('api/family/add', {
         name: familyName,
+        userId: userId,
       });
 
       console.log('Family created', familyResponse.data);
