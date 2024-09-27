@@ -4,8 +4,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useLocation } from 'react-router-dom';
 
 // Header component with collapsible menu
-function Header({ isLoggedIn, onLogout }) {
+function Header({ isLoggedIn, onLogout, userName }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const location = useLocation();
 
   // Handle menu open
@@ -16,6 +17,22 @@ function Header({ isLoggedIn, onLogout }) {
   // Handle menu close
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  // Handle user menu open
+  const handleUserMenuOpen = (event) => {
+    setUserMenuAnchorEl(event.currentTarget);
+  };
+
+  // Handle user menu close
+  const handleUserMenuClose = () => {
+    setUserMenuAnchorEl(null);
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    handleUserMenuClose();
+    onLogout();
   };
 
   return (
@@ -40,16 +57,27 @@ function Header({ isLoggedIn, onLogout }) {
                 Dashboard
               </MenuItem>
               <MenuItem component={Link} to="/create-family" onClick={handleMenuClose}>
-                CreateFamily
+                Create Family
               </MenuItem>
             </Menu>
           </>
         )}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {/* Removed "Chores App" text */}
+          My App
         </Typography>
         {isLoggedIn ? (
-          <Button color="inherit" onClick={onLogout}>Logout</Button>
+          <>
+            <Button color="inherit" onClick={handleUserMenuOpen}>
+              {userName}
+            </Button>
+            <Menu
+              anchorEl={userMenuAnchorEl}
+              open={Boolean(userMenuAnchorEl)}
+              onClose={handleUserMenuClose}
+            >
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </>
         ) : (
           location.pathname !== '/' && <Button color="inherit" component={Link} to="/">Login</Button>
         )}

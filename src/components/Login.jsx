@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
+import { jwtDecode } from 'jwt-decode';
 
 // Login component for user authentication
 function Login({ onLoginSuccess }) {
@@ -26,14 +27,26 @@ function Login({ onLoginSuccess }) {
       console.log('Login response:', response);
       
       if (response.data) {
-        // Store the token and user ID
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userId', response.data.userId);
-        console.log('Token and userId stored in localStorage');
+        const token = response.data; // The token is directly in response.data
+        localStorage.setItem('token', token);
+        
+        // Decode the token to get user information
+        const decodedToken = jwtDecode(token);
+        console.log('Decoded token:', decodedToken);
+        
+        // Store user information from the decoded token
+        localStorage.setItem('userId', decodedToken.id);
+        localStorage.setItem('firstName', decodedToken.firstName);
+        localStorage.setItem('lastName', decodedToken.lastName);
+        localStorage.setItem('userRole', decodedToken.role);
+        localStorage.setItem('email', decodedToken.email);
+        localStorage.setItem('fullName', `${decodedToken.firstName} ${decodedToken.lastName}`);
+        
+        console.log('User information stored in localStorage');
         onLoginSuccess();
         navigate('/dashboard');
       } else {
-        setError('Login successful, but no token received');
+        setError('Login failed: No token received');
       }
     } catch (error) {
       console.error('Login failed', error.response || error);
@@ -91,6 +104,12 @@ function Login({ onLoginSuccess }) {
           >
             Sign In
           </Button>
+          {/* New Register link */}
+          <Box textAlign="center">
+            <Link to="/register">
+              Don't have an account? Register here
+            </Link>
+          </Box>
         </Box>
       </Box>
     </Container>

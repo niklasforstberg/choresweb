@@ -1,0 +1,1 @@
+This project is a simple UI for an api. It is built with React and uses the Material-UI library for styling. It also uses axios to make requests to the api. The API is built using .NET Core 8. It is not using typescript. It is using json web tokens for authentication. The JWT includes given name, surname, email and Id for the logged in user.
