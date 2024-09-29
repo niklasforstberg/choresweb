@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
-import { jwtDecode } from 'jwt-decode';
 
 // Login component for user authentication
 function Login({ onLoginSuccess }) {
@@ -22,7 +21,6 @@ function Login({ onLoginSuccess }) {
       const response = await axiosInstance.post('api/security/login', { 
         email, 
         password,
-        username: email // Using email as username since the API doesn't use it
       });
       console.log('Login response:', response);
       
@@ -30,20 +28,7 @@ function Login({ onLoginSuccess }) {
         const token = response.data; // The token is directly in response.data
         localStorage.setItem('token', token);
         
-        // Decode the token to get user information
-        const decodedToken = jwtDecode(token);
-        console.log('Decoded token:', decodedToken);
-        
-        // Store user information from the decoded token
-        localStorage.setItem('userId', decodedToken.id);
-        localStorage.setItem('firstName', decodedToken.firstName);
-        localStorage.setItem('lastName', decodedToken.lastName);
-        localStorage.setItem('userRole', decodedToken.role);
-        localStorage.setItem('email', decodedToken.email);
-        localStorage.setItem('fullName', `${decodedToken.firstName} ${decodedToken.lastName}`);
-        
-        console.log('User information stored in localStorage');
-        onLoginSuccess();
+       onLoginSuccess();
         navigate('/dashboard');
       } else {
         setError('Login failed: No token received');

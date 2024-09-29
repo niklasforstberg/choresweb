@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
+import { jwtDecode } from 'jwt-decode';
 
 // Register component for user registration
-function Register() {
+function Register({ onLoginSuccess }) {  // Add this prop
   // State for form inputs and error handling
   const [formData, setFormData] = useState({
     firstName: '',
@@ -38,9 +39,14 @@ function Register() {
       });
       console.log('Registration response:', response);
       if (response.data) {
-        // Store the token and redirect to dashboard
         localStorage.setItem('token', response.data);
-        navigate('/dashboard');
+        console.log('Registration token:', response.data);
+        // Call onLoginSuccess to update app state
+        onLoginSuccess();
+        
+        console.log('About to navigate to /family-options');
+        navigate('/family-options');
+        console.log('Navigation called');
       } else {
         setError('Registration successful, but no token received');
       }
