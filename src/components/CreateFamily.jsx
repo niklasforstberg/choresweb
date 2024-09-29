@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 function CreateFamily() {
   const [familyName, setFamilyName] = useState('');
   const [error, setError] = useState('');
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token'); // Add this line
     if (storedUserId) {
       setUserId(storedUserId);
+    }
+    if (token) { // Add this block
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
   }, []);
 
@@ -29,10 +35,19 @@ function CreateFamily() {
       });
 
       console.log('Family created', familyResponse.data);
-      // Handle success (e.g., show success message, redirect)
+      // Store the familyId in localStorage
+      localStorage.setItem('familyId', familyResponse.data.id);
+      // Navigate to the AddFamilyMembers component
+      navigate('/add-family-members');
     } catch (error) {
       console.error('Failed to create family', error.response || error);
       setError(error.response?.data?.message || 'An error occurred while creating the family');
+      if (error.response?.status === 401) {
+        // Add this block to handle 401 errors
+        setError('Authentication failed. Please log in again.');
+        // Optionally, you can redirect to the login page
+        // navigate('/login');
+      }
     }
   };
 

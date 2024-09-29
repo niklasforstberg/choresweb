@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import CreateFamily from './components/CreateFamily';
 import { jwtDecode } from 'jwt-decode';
 import FamilyOptions from './components/FamilyOptions';
+import AddFamilyMembers from './components/AddFamilyMembers';
 
 // Main App component
 function App() {
@@ -74,20 +75,20 @@ function App() {
             {/* Route for user registration */}
             <Route path="/register" element={<Register onLoginSuccess={handleLoginSuccess} />} />
             
-            {/* Protected route for dashboard, redirects to login if not authenticated */}
+            {/*  protected route  */}
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
-
-            {/* New protected route for CreateFamily */}
             <Route path="/create-family" element={isLoggedIn ? <CreateFamily /> : <Navigate to="/" />} />
-
-            {/* New route for FamilyOptions */}
             <Route path="/family-options" element={isLoggedIn ? <FamilyOptions /> : <Navigate to="/" />} />
+            <Route path="/add-family-members" element={isLoggedIn ? <AddFamilyMembers /> : <Navigate to="/" />} />
             
             {/* You'll need to create this component and route when ready */}
             {/* <Route path="/apply-to-family" element={isLoggedIn ? <ApplyToFamily /> : <Navigate to="/" />} /> */}
             
             {/* Catch-all route for undefined paths */}
             <Route path="*" element={<Navigate to="/" />} />
+            
+            
+            
           </Routes>
         </Container>
       </Box>
