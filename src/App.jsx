@@ -19,20 +19,31 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      console.log('Raw token:', token); // Log the raw token
+      console.log('Raw token in app.jsx:', token);
       try {
         if (token.split('.').length !== 3) {
           throw new Error('Token does not have three parts');
         }
         const decodedToken = jwtDecode(token);
-        console.log('Decoded token:', decodedToken); // Add this line
+        console.log('Decoded token:', decodedToken);
         localStorage.setItem('userId', decodedToken.id);
         localStorage.setItem('firstName', decodedToken.firstName);
         localStorage.setItem('lastName', decodedToken.lastName);
         localStorage.setItem('userRole', decodedToken.role);
         localStorage.setItem('email', decodedToken.email);
         localStorage.setItem('fullName', `${decodedToken.firstName} ${decodedToken.lastName}`);
-;
+        localStorage.setItem('familyId', decodedToken.familyId);
+        localStorage.setItem('familyName', decodedToken.familyName);
+        console.log('userId:', localStorage.getItem('userId'));
+        console.log('firstName:', localStorage.getItem('firstName'));
+        console.log('lastName:', localStorage.getItem('lastName'));
+        console.log('userRole:', localStorage.getItem('userRole'));
+        console.log('email:', localStorage.getItem('email'));
+        console.log('fullName:', localStorage.getItem('fullName'));
+        console.log('familyId:', localStorage.getItem('familyId'));
+        console.log('familyName:', localStorage.getItem('familyName'));
+
+
       } catch (error) {
         console.error('Error decoding token:', error);
         localStorage.removeItem('token');
@@ -56,7 +67,8 @@ function App() {
     localStorage.setItem('userRole', '');
     localStorage.setItem('email', '');
     localStorage.setItem('fullName', '');
-
+    localStorage.setItem('familyId', '');
+    localStorage.setItem('familyName','');
   };
 
   return (
@@ -64,7 +76,7 @@ function App() {
       {/* Main layout container */}
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         {/* Header component with login status and logout functionality */}
-        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} userName={localStorage.getItem('fullName')} />
+        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} fullName={localStorage.getItem('fullName')} />
         
         {/* Main content container */}
         <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>
@@ -80,7 +92,7 @@ function App() {
             <Route path="/create-family" element={isLoggedIn ? <CreateFamily /> : <Navigate to="/" />} />
             <Route path="/family-options" element={isLoggedIn ? <FamilyOptions /> : <Navigate to="/" />} />
             <Route path="/add-family-members" element={isLoggedIn ? <AddFamilyMembers /> : <Navigate to="/" />} />
-            
+
             {/* You'll need to create this component and route when ready */}
             {/* <Route path="/apply-to-family" element={isLoggedIn ? <ApplyToFamily /> : <Navigate to="/" />} /> */}
             

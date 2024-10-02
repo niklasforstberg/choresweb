@@ -11,12 +11,12 @@ function CreateFamily() {
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
-    const token = localStorage.getItem('token'); // Add this line
     if (storedUserId) {
       setUserId(storedUserId);
-    }
-    if (token) { // Add this block
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      setError('User ID not found. Please log in again.');
+      // Optionally redirect to login page
+      // navigate('/login');
     }
   }, []);
 
@@ -28,15 +28,14 @@ function CreateFamily() {
       return;
     }
     try {
-      // Create the family
       const familyResponse = await axiosInstance.post('api/family/add', {
-        name: familyName,
-        userId: userId,
+        Name: familyName,
+        CreatedBy: userId,
       });
 
-      console.log('Family created', familyResponse.data);
       // Store the familyId in localStorage
       localStorage.setItem('familyId', familyResponse.data.id);
+      localStorage.setItem('familyName', familyName);
       // Navigate to the AddFamilyMembers component
       navigate('/add-family-members');
     } catch (error) {

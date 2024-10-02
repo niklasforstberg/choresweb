@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useLocation } from 'react-router-dom';
 
 // Header component with collapsible menu
-function Header({ isLoggedIn, onLogout, userName }) {
+function Header({ isLoggedIn, onLogout, fullName }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const location = useLocation();
@@ -63,12 +63,12 @@ function Header({ isLoggedIn, onLogout, userName }) {
           </>
         )}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          My App
+        {localStorage.getItem('familyName')}
         </Typography>
         {isLoggedIn ? (
           <>
             <Button color="inherit" onClick={handleUserMenuOpen}>
-              {userName}
+              {fullName}
             </Button>
             <Menu
               anchorEl={userMenuAnchorEl}

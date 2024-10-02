@@ -16,16 +16,14 @@ function Login({ onLoginSuccess }) {
     e.preventDefault();
     setError('');
     try {
-      console.log('Attempting to log in with:', { email, password });
-      // Send login request to the API
       const response = await axiosInstance.post('api/security/login', { 
         email, 
         password,
       });
-      console.log('Login response:', response);
       
       if (response.data) {
-        const token = response.data; // The token is directly in response.data
+        const token = response.data;
+
         localStorage.setItem('token', token);
         
        onLoginSuccess();
