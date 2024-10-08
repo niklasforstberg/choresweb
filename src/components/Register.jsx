@@ -1,21 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import axiosInstance from '../utils/axiosConfig';
-import { jwtDecode } from 'jwt-decode';
 
 // Register component for user registration
 function Register({ onLoginSuccess }) {  // Add this prop
+  const location = useLocation();
+  const navigate = useNavigate();
+  
   // State for form inputs and error handling
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    email: location.state?.email || '',
     password: '',
     confirmPassword: '',
   });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  
+  // Use effect to handle invitation data
+  useEffect(() => {
+    if (location.state?.email) {
+      setFormData(prevData => ({
+        ...prevData,
+        email: location.state.email
+      }));
+    }
+    if (location.state?.familyId && location.state?.familyName) {
+      // Store family information in localStorage
+      localStorage.setItem('familyId', location.state.familyId);
+      localStorage.setItem('familyName', location.state.familyName);
+    }
+  }, [location.state]);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -29,13 +45,16 @@ function Register({ onLoginSuccess }) {  // Add this prop
     }
 
     try {
+      // Retrieve familyId from localStorage
+      const familyId = localStorage.getItem('familyId');
+
       // Send registration request to the API
       const response = await axiosInstance.post('api/security/register', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        username: formData.email // Using email as username
+        familyId: familyId // Use the familyId from localStorage
       });
       console.log('Registration response:', response);
       if (response.data) {
@@ -109,6 +128,7 @@ function Register({ onLoginSuccess }) {  // Add this prop
             autoComplete="email"
             value={formData.email}
             onChange={handleChange}
+            disabled={!!location.state?.email} // Disable if email is provided from invitation
           />
           <TextField
             margin="normal"

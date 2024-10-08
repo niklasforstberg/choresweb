@@ -14,7 +14,7 @@ function Dashboard() {
       try {
         const token = localStorage.getItem('token');
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        const familyId = decodedToken.familyId; // Assuming familyId is included in the JWT
+        const familyId = decodedToken.familyId;
 
         const [membersResponse, invitationsResponse] = await Promise.all([
           axios.get(`/api/family/${familyId}/users`),
