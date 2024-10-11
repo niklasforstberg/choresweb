@@ -21,13 +21,8 @@ function Login({ onLoginSuccess }) {
         password,
       });
       
-      if (response.data) {
-        const token = response.data;
-
-        localStorage.setItem('token', token);
-        
-       onLoginSuccess();
-        navigate('/dashboard');
+      if (response.data && response.data.token) {
+        onLoginSuccess(response.data.token); // Pass the token to handleLoginSuccess
       } else {
         setError('Login failed: No token received');
       }

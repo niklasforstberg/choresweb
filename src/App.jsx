@@ -14,62 +14,58 @@ import AcceptInvitation from './components/AcceptInvitation';
 // Main App component
 function App() {
   // State to track user's login status
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+
+  // Function to handle token processing
+  const processToken = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const newUserInfo = {
+        userId: decodedToken.id,
+        firstName: decodedToken.firstName,
+        lastName: decodedToken.lastName,
+        fullName: `${decodedToken.firstName} ${decodedToken.lastName}`,
+        userRole: decodedToken.role,
+        email: decodedToken.email,
+        familyId: decodedToken.familyId,
+        familyName: decodedToken.familyName,
+      };
+      setUserInfo(newUserInfo);
+      setIsLoggedIn(true);
+
+      // Set localStorage items
+      localStorage.setItem('token', token);
+      Object.entries(newUserInfo).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error processing token:', error);
+      handleLogout();
+      return false;
+    }
+  };
 
   // Effect to decode JWT token
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      console.log('Raw token in app.jsx:', token);
-      try {
-        if (token.split('.').length !== 3) {
-          throw new Error('Token does not have three parts');
-        }
-        const decodedToken = jwtDecode(token);
-        console.log('Decoded token:', decodedToken);
-        localStorage.setItem('userId', decodedToken.id);
-        localStorage.setItem('firstName', decodedToken.firstName);
-        localStorage.setItem('lastName', decodedToken.lastName);
-        localStorage.setItem('userRole', decodedToken.role);
-        localStorage.setItem('email', decodedToken.email);
-        localStorage.setItem('fullName', `${decodedToken.firstName} ${decodedToken.lastName}`);
-        localStorage.setItem('familyId', decodedToken.familyId);
-        localStorage.setItem('familyName', decodedToken.familyName);
-        console.log('userId:', localStorage.getItem('userId'));
-        console.log('firstName:', localStorage.getItem('firstName'));
-        console.log('lastName:', localStorage.getItem('lastName'));
-        console.log('userRole:', localStorage.getItem('userRole'));
-        console.log('email:', localStorage.getItem('email'));
-        console.log('fullName:', localStorage.getItem('fullName'));
-        console.log('familyId:', localStorage.getItem('familyId'));
-        console.log('familyName:', localStorage.getItem('familyName'));
-
-
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        localStorage.removeItem('token');
-        setIsLoggedIn(false); 
-      }
+      processToken(token);
     }
-  }, [isLoggedIn]);
+  }, []);
 
   // Function to handle successful login
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
+  const handleLoginSuccess = (token) => {
+    processToken(token);
   };
 
   // Function to handle user logout
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     setIsLoggedIn(false);
-    localStorage.setItem('userId', '');
-    localStorage.setItem('firstName', '');
-    localStorage.setItem('lastName', '');
-    localStorage.setItem('userRole', '');
-    localStorage.setItem('email', '');
-    localStorage.setItem('fullName', '');
-    localStorage.setItem('familyId', '');
-    localStorage.setItem('familyName','');
+    setUserInfo({});
   };
 
   return (
@@ -77,7 +73,7 @@ function App() {
       {/* Main layout container */}
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         {/* Header component with login status and logout functionality */}
-        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} fullName={localStorage.getItem('fullName')} />
+        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} fullName={userInfo.fullName} />
         
         {/* Main content container */}
         <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>

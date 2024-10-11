@@ -54,14 +54,13 @@ function Register({ onLoginSuccess }) {  // Add this prop
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        familyId: familyId // Use the familyId from localStorage
+        familyId: familyId
       });
       console.log('Registration response:', response);
-      if (response.data) {
-        localStorage.setItem('token', response.data);
-        console.log('Registration token:', response.data);
-        // Call onLoginSuccess to update app state
-        onLoginSuccess();
+
+      if (response.data && response.data.token) {
+        // Call onLoginSuccess with the token
+        onLoginSuccess(response.data.token);
         
         console.log('About to navigate to /family-options');
         navigate('/family-options');
