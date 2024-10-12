@@ -59,6 +59,9 @@ function Header({ isLoggedIn, onLogout, fullName }) {
               <MenuItem component={Link} to="/create-family" onClick={handleMenuClose}>
                 Create Family
               </MenuItem>
+              <MenuItem component={Link} to="/manage-chores" onClick={handleMenuClose}>
+                Manage Chores
+              </MenuItem>
             </Menu>
           </>
         )}

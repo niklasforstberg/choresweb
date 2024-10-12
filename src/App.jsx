@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import FamilyOptions from './components/FamilyOptions';
 import AddFamilyMembers from './components/AddFamilyMembers';
 import AcceptInvitation from './components/AcceptInvitation';
+import ManageChores from './components/ManageChores';
 
 // Main App component
 function App() {
@@ -90,6 +91,7 @@ function App() {
             <Route path="/family-options" element={isLoggedIn ? <FamilyOptions /> : <Navigate to="/" />} />
             <Route path="/add-family-members" element={isLoggedIn ? <AddFamilyMembers /> : <Navigate to="/" />} />
             <Route path="/accept-invitation/:token/accept" element={<AcceptInvitation />} />
+            <Route path="/manage-chores" element={isLoggedIn ? <ManageChores /> : <Navigate to="/" />} />
             {/* You'll need to create this component and route when ready */}
             {/* <Route path="/apply-to-family" element={isLoggedIn ? <ApplyToFamily /> : <Navigate to="/" />} /> */}
             
