@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
 import { Typography, Container, Box, CircularProgress } from '@mui/material';
@@ -8,8 +8,11 @@ console.log('AcceptInvitation component rendered');
   const { token } = useParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState('loading');
+  const effectRan = useRef(false);
 
   useEffect(() => {
+    if (effectRan.current) return;
+
     const acceptInvitation = async () => {
       console.log('Attempting to accept invitation with token:', token);
       try {
@@ -18,20 +21,20 @@ console.log('AcceptInvitation component rendered');
         setStatus('success');
         
         // Store family information in localStorage
-        if (response.data.Family) {
-          localStorage.setItem('familyId', response.data.Family.FamilyId);
-          localStorage.setItem('familyName', response.data.Family.FamilyName);
+        if (response.data.family) {
+          localStorage.setItem('familyId', response.data.family.familyId);
+          localStorage.setItem('familyName', response.data.family.familyName);
         }
         
         // Check if the user exists and navigate accordingly
-        if (response.data.UserExists) {
-          setTimeout(() => navigate('/dashboard'), 3000);
+        if (response.data.userExists) {
+          setTimeout(() => navigate('/login'), 3000);
         } else {
           setTimeout(() => navigate('/register', { 
             state: { 
-              email: response.data.InviteeEmail,
-              familyId: response.data.Family.FamilyId,
-              familyName: response.data.Family.FamilyName
+              email: response.data.inviteeEmail,
+              familyId: response.data.family.familyId,
+              familyName: response.data.family.familyName
             } 
           }), 3000);
         }
@@ -55,6 +58,10 @@ console.log('AcceptInvitation component rendered');
     };
 
     acceptInvitation();
+
+    return () => {
+      effectRan.current = true;
+    };
   }, [token, navigate]);
 
   return (
