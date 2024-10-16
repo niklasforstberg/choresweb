@@ -11,6 +11,7 @@ import FamilyOptions from './components/FamilyOptions';
 import AddFamilyMembers from './components/AddFamilyMembers';
 import AcceptInvitation from './components/AcceptInvitation';
 import ManageChores from './components/ManageChores';
+import AddChoreLog from './components/AddChoreLog';
 
 // Main App component
 function App() {
@@ -92,6 +93,7 @@ function App() {
             <Route path="/add-family-members" element={isLoggedIn ? <AddFamilyMembers /> : <Navigate to="/" />} />
             <Route path="/accept-invitation/:token/accept" element={<AcceptInvitation />} />
             <Route path="/manage-chores" element={isLoggedIn ? <ManageChores /> : <Navigate to="/" />} />
+            <Route path="/add-chore-log" element={isLoggedIn ? <AddChoreLog /> : <Navigate to="/" />} />
             {/* You'll need to create this component and route when ready */}
             {/* <Route path="/apply-to-family" element={isLoggedIn ? <ApplyToFamily /> : <Navigate to="/" />} /> */}
             

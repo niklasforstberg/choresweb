@@ -62,6 +62,9 @@ function Header({ isLoggedIn, onLogout, fullName }) {
               <MenuItem component={Link} to="/manage-chores" onClick={handleMenuClose}>
                 Manage Chores
               </MenuItem>
+              <MenuItem component={Link} to="/add-chore-log" onClick={handleMenuClose}>
+                Add Chore Log
+              </MenuItem>
             </Menu>
           </>
         )}
