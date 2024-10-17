@@ -16,12 +16,14 @@ The "/api/chore/add"endpoint expects these parameters:
 }
 But we should not send in the Id, as the database will create it.
 
+The user should be able to select the family member that completed the chore, and the user should also be able to select the chore that was completed.
 
-The component should have two carousels. The first carousel should have the list of family members. The second carousel should have the list of chores. When the user selects a name or chore, that card should be highlighted. The carousels should be swipable right or left.
-The carousel I would like to use is https://www.npmjs.com/package/react-material-ui-carousel
+Each family member name should be a card. If the user selectes a card, that card should be highlighted. The cards should be swipable right or left.  
+Similalary, each chore should be a card. If the user selectes a card, that card should be highlighted. The cards should be swipable right or left. 
+I think we should use the react-slick library to enable swiping: https://react-slick.neostack.com/docs/get-started
 
 
-Here is the endpoint for the family members:
+Here is the endpoint to get all members of the family:
 https://localhost:7165/api/family/getall
 
 Here is the endpoint for the chores:
