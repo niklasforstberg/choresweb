@@ -1,72 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../utils/axiosConfig';
-import { Typography, List, ListItem, ListItemText, Paper, Grid } from '@mui/material';
+import { Typography, Box, List, ListItem, ListItemText, ListItemButton, Paper } from '@mui/material';
+import { Link } from 'react-router-dom';
+import axiosInstance from '../utils/axiosConfig';
 
 // Dashboard component for displaying user's dashboard
 function Dashboard() {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [recentChores, setRecentChores] = useState([]);
+
+  const familyName = localStorage.getItem('familyName');
+  const userName = `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')}`;
+  const familyId = localStorage.getItem('familyId');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        const familyId = decodedToken.familyId;
-
-        const [membersResponse, invitationsResponse] = await Promise.all([
-          axios.get(`/api/family/${familyId}/users`),
-          axios.get(`/api/family/${familyId}/invitations`)
+        const [membersRes, invitationsRes, choresRes] = await Promise.all([
+          axiosInstance.get(`/api/family/${familyId}/getfamilymembers`),
+          axiosInstance.get(`/api/family/${familyId}/invitations`),
+          axiosInstance.get('/api/chorelog/recent/5')
         ]);
 
-        setFamilyMembers(membersResponse.data);
-        setInvitations(invitationsResponse.data);
-      } catch (err) {
-        setError('Failed to fetch data. Please try again later.');
-        console.error('Error fetching data:', err);
-      } finally {
-        setLoading(false);
+        setFamilyMembers(membersRes.data);
+        setInvitations(invitationsRes.data);
+        setRecentChores(choresRes.data);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
       }
     };
 
-    fetchData();
-  }, []);
-
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+    fetchDashboardData();
+  }, [familyId]);
 
   return (
-    <div className="dashboard-container">
-      <Typography variant="h4" gutterBottom>Dashboard</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ padding: '1rem' }}>
-            <Typography variant="h6" gutterBottom>Family Members</Typography>
-            <List>
-              {familyMembers.map((member) => (
-                <ListItem key={member.id}>
-                  <ListItemText primary={`${member.givenName} ${member.surname}`} secondary={member.email} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ padding: '1rem' }}>
-            <Typography variant="h6" gutterBottom>Active Invitations</Typography>
-            <List>
-              {invitations.map((invitation) => (
-                <ListItem key={invitation.id}>
-                  <ListItemText primary={invitation.email} secondary={`Invited on: ${new Date(invitation.createdAt).toLocaleDateString()}`} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Typography variant="h4" component="h1">
+        Welcome, {userName}
+      </Typography>
+      <Typography variant="h5" component="h2">
+        {familyName} Dashboard
+      </Typography>
+
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <Typography variant="h6" component="h3" gutterBottom>
+          Family Members
+        </Typography>
+        <List>
+          {familyMembers.map((member) => (
+            <ListItem key={member.id} disablePadding>
+              <ListItemButton component={Link} to={`/profile/${member.id}`}>
+                <ListItemText primary={`${member.firstName} ${member.lastName}`} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <Typography variant="h6" component="h3" gutterBottom>
+          Invitations
+        </Typography>
+        <List>
+          {invitations.map((invitation) => (
+            <ListItem key={invitation.id} disablePadding>
+              <ListItemButton component={Link} to="/invitations">
+                <ListItemText primary={invitation.email} secondary={invitation.status} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <Typography variant="h6" component="h3" gutterBottom>
+          Recent Chore Logs
+        </Typography>
+        <List>
+          {recentChores.map((chore) => (
+            <ListItem key={chore.id} disablePadding>
+              <ListItemButton component={Link} to="/chore-log">
+                <ListItemText 
+                  primary={chore.choreName} 
+                  secondary={`${chore.completedBy} - ${new Date(chore.completedAt).toLocaleDateString()}`} 
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Box>
   );
 }
 
