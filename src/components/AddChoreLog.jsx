@@ -43,7 +43,7 @@ function AddChoreLog() {
     }
     try {
       const response = await axiosInstance.get(
-        `/api/family/${familyId}/getallmembers`
+        `/api/family/{familyId}/getfamilymembers`
       );
       setFamilyMembers(response.data);
     } catch (error) {
@@ -124,7 +124,6 @@ function AddChoreLog() {
   };
 
   const handleMemberSelect = (member) => {
-    console.log("membe.idr:", member.id);
     setSelectedMember(member.id === selectedMember?.id ? null : member);
   };
 
@@ -136,7 +135,7 @@ function AddChoreLog() {
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={sv}>
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Add Chore Log
+          Add Chore Entry
         </Typography>
 
         <Typography variant="h6" gutterBottom>
