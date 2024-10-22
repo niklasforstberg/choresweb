@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, List, ListItem, ListItemText, ListItemButton, Paper, Grid, Container } from '@mui/material';
+import { Typography, Box, List, ListItem, ListItemText, ListItemButton, Paper, Grid, Container, Stack, Card, CardContent, Divider, Chip, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
+import PeopleIcon from '@mui/icons-material/People';
+import MailIcon from '@mui/icons-material/Mail';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 // Dashboard component for displaying user's dashboard
 function Dashboard() {
@@ -34,73 +38,120 @@ function Dashboard() {
   }, [familyId]);
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, my: 3 }}>
-        <Typography variant="h4" component="h1">
-          Welcome, {userName}
-        </Typography>
+    <Stack direction="row" flexWrap="wrap" spacing={3} sx={{ padding: 3 }}>
+      {/* Family Members Card */}
+      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <PeopleIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Family Members
+            </Typography>
+            <Stack direction="column" spacing={1}>
+              {familyMembers.map((member, index) => (
+                <Typography variant="body1" key={index}>
+                  {member.firstName} {member.lastName}
+                </Typography>
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      </Stack>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                {familyName}
-              </Typography>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Family Members
-              </Typography>
-              <List>
-                {familyMembers.map((member) => (
-                  <ListItem key={member.id} disablePadding>
-                    <ListItemButton component={Link} to={`/profile/${member.id}`}>
-                      <ListItemText primary={`${member.firstName} ${member.lastName}`} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
+      {/* Active Invitations Card */}
+      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <MailIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Active Invitations
+            </Typography>
+            <List>
+              {invitations.map((invitation) => (
+                <ListItem key={invitation.id}>
+                  <ListItemText primary={invitation.InviteeEmail} />
+                  <Chip 
+                    label={invitation.Status} 
+                    color={invitation.Status === 'Accepted' ? 'success' : 'default'} 
+                    size="small" 
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        </Card>
+      </Stack>
 
-          <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{ p: 2 }}>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Invitations
-              </Typography>
-              <List>
-                {invitations.map((invitation) => (
-                  <ListItem key={invitation.id} disablePadding>
-                    <ListItemButton component={Link} to="/invitations">
-                      <ListItemText primary={invitation.email} secondary={invitation.status} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
+      {/* Recent Chores Card */}
+      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              
+              Recent Chores
+            </Typography>
+            <List>
+              {recentChores.map((chore) => (
+                <ListItem key={chore.id}>
+                  <ListItemText 
+                    primary={chore.task} 
+                    secondary={`Done by ${chore.doneBy} on ${chore.date}`} 
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        </Card>
+      </Stack>
 
-          <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{ p: 2 }}>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Recent Chore Logs
-              </Typography>
-              <List>
-                {recentChores.map((chore) => (
-                  <ListItem key={chore.id} disablePadding>
-                    <ListItemButton component={Link} to="/chore-log">
-                      <ListItemText 
-                        primary={chore.choreName} 
-                        secondary={`${chore.completedBy} - ${new Date(chore.completedAt).toLocaleDateString()}`} 
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
+      {/* Family Budget Card */}
+      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <AttachMoneyIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Family Budget
+            </Typography>
+            <Typography variant="h4" color="primary">
+              $1,234.56
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Monthly budget remaining
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="body2">
+              Next allowance day: April 30, 2023
+            </Typography>
+          </CardContent>
+        </Card>
+      </Stack>
+
+      {/* Upcoming Events Card */}
+      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <CalendarTodayIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Upcoming Family Events
+            </Typography>
+            <List>
+              <ListItem>
+                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>20</Avatar>
+                <ListItemText primary="Family Game Night" secondary="April 20, 2023" />
+              </ListItem>
+              <ListItem>
+                <Avatar sx={{ bgcolor: 'secondary.main', mr: 2 }}>25</Avatar>
+                <ListItemText primary="Grandma's Birthday" secondary="April 25, 2023" />
+              </ListItem>
+              <ListItem>
+                <Avatar sx={{ bgcolor: 'error.main', mr: 2 }}>01</Avatar>
+                <ListItemText primary="Family Picnic" secondary="May 1, 2023" />
+              </ListItem>
+            </List>
+          </CardContent>
+        </Card>
+      </Stack>
+    </Stack>
   );
 }
-
 export default Dashboard;
