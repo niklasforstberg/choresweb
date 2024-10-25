@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box, List, ListItem, ListItemText, ListItemButton, Paper, Grid, Container, Stack, Card, CardContent, Divider, Chip, Avatar } from '@mui/material';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig';
 import PeopleIcon from '@mui/icons-material/People';
@@ -11,7 +12,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 function Dashboard() {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
-  const [recentChores, setRecentChores] = useState([]);
+  const [choreData, setChoreData] = useState([]);
 
   const familyName = localStorage.getItem('familyName');
   const userName = `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')}`;
@@ -37,11 +38,47 @@ function Dashboard() {
     fetchDashboardData();
   }, [familyId]);
 
+  useEffect(() => {
+    const fetchChoreData = async () => {
+      try {
+        const [membersRes, choresRes] = await Promise.all([
+          axiosInstance.get(`/api/family/${familyId}/getfamilymembers`),
+          axiosInstance.get('/api/chores') // Assuming this endpoint returns all chores
+        ]);
+
+        const members = membersRes.data;
+        const chores = choresRes.data;
+
+        const choreCountPromises = chores.map(chore =>
+          Promise.all(members.map(member =>
+            axiosInstance.get(`/api/chorelog/count/${member.id}/${chore.id}`)
+          ))
+        );
+
+        const choreCountsData = await Promise.all(choreCountPromises);
+
+        const processedChoreData = chores.map((chore, index) => {
+          const choreData = { name: chore.name };
+          members.forEach((member, memberIndex) => {
+            choreData[member.firstName] = choreCountsData[index][memberIndex].data.count;
+          });
+          return choreData;
+        });
+
+        setChoreData(processedChoreData);
+      } catch (error) {
+        console.error('Error fetching chore data:', error);
+      }
+    };
+
+    fetchChoreData();
+  }, [familyId]);
+
   return (
     <Stack direction="row" flexWrap="wrap" spacing={3} sx={{ padding: 3 }}>
       {/* Family Members Card */}
       <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card>
+        <Card className="dashboard-card">
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <PeopleIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
@@ -60,7 +97,7 @@ function Dashboard() {
 
       {/* Active Invitations Card */}
       <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card>
+        <Card className="dashboard-card">
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <MailIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
@@ -82,76 +119,33 @@ function Dashboard() {
         </Card>
       </Stack>
 
-      {/* Recent Chores Card */}
+      {/* Chore Statistics Card */}
       <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card>
+        <Card className="dashboard-card">
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              
-              Recent Chores
+              Chore Statistics
             </Typography>
-            <List>
-              {recentChores.map((chore) => (
-                <ListItem key={chore.id}>
-                  <ListItemText 
-                    primary={chore.task} 
-                    secondary={`Done by ${chore.doneBy} on ${chore.date}`} 
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={choreData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                {familyMembers.map((member, index) => (
+                  <Bar
+                    key={member.id}
+                    dataKey={member.firstName}
+                    fill={`hsl(${index * 360 / familyMembers.length}, 70%, 50%)`}
                   />
-                </ListItem>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
-      </Stack>
-
-      {/* Family Budget Card */}
-      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              <AttachMoneyIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
-              Family Budget
-            </Typography>
-            <Typography variant="h4" color="primary">
-              $1,234.56
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Monthly budget remaining
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="body2">
-              Next allowance day: April 30, 2023
-            </Typography>
-          </CardContent>
-        </Card>
-      </Stack>
-
-      {/* Upcoming Events Card */}
-      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              <CalendarTodayIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
-              Upcoming Family Events
-            </Typography>
-            <List>
-              <ListItem>
-                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>20</Avatar>
-                <ListItemText primary="Family Game Night" secondary="April 20, 2023" />
-              </ListItem>
-              <ListItem>
-                <Avatar sx={{ bgcolor: 'secondary.main', mr: 2 }}>25</Avatar>
-                <ListItemText primary="Grandma's Birthday" secondary="April 25, 2023" />
-              </ListItem>
-              <ListItem>
-                <Avatar sx={{ bgcolor: 'error.main', mr: 2 }}>01</Avatar>
-                <ListItemText primary="Family Picnic" secondary="May 1, 2023" />
-              </ListItem>
-            </List>
+                ))}
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </Stack>
     </Stack>
   );
 }
+
 export default Dashboard;
