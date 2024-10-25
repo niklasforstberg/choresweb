@@ -20,7 +20,7 @@ function AddChoreLog() {
   const [chores, setChores] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedChore, setSelectedChore] = useState(null);
-  const [dueDate, setDueDate] = useState(new Date());
+  const [CompletedDate, setCompletedDate] = useState(new Date());
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const dataFetchedRef = useRef(false);
@@ -43,7 +43,7 @@ function AddChoreLog() {
     }
     try {
       const response = await axiosInstance.get(
-        `/api/family/{familyId}/getfamilymembers`
+        `/api/family/${familyId}/getfamilymembers`
       );
       setFamilyMembers(response.data);
     } catch (error) {
@@ -74,8 +74,7 @@ function AddChoreLog() {
     }
 
     const choreLog = {
-      isCompleted: true,
-      dueDate: dueDate.toISOString(),
+      CompletedDate: CompletedDate.toISOString(),
       choreId: selectedChore.id,
       userId: selectedMember.id,
       choreName: selectedChore.name,
@@ -84,14 +83,14 @@ function AddChoreLog() {
     };
 
     try {
-      await axiosInstance.post("/api/chore/add", choreLog);
+      await axiosInstance.post("/api/chorelog/add", choreLog);
       setSnackbarMessage(
         `Chore "${selectedChore.name}" logged for ${selectedMember.firstName}`
       );
       setSnackbarOpen(true);
       setSelectedMember(null);
       setSelectedChore(null);
-      setDueDate(new Date());
+      setCompletedDate(new Date());
     } catch (error) {
       console.error("Error adding chore log:", error);
       setSnackbarMessage("Error adding chore log");
@@ -192,9 +191,9 @@ function AddChoreLog() {
 
         <Box sx={{ mt: 4 }}>
           <DateTimePicker
-            label="Due Date"
-            value={dueDate}
-            onChange={(newValue) => setDueDate(newValue)}
+            label="Completed at"
+            value={CompletedDate}
+            onChange={(newValue) => setCompletedDate(newValue)}
             slotProps={{ textField: { fullWidth: true } }}
             ampm={false}
             format="yyyy-MM-dd HH:mm"
@@ -207,7 +206,7 @@ function AddChoreLog() {
           onClick={handleSubmit}
           sx={{ mt: 4 }}
         >
-          Log Chore
+          Chore done!
         </Button>
 
         <Snackbar

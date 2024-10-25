@@ -23,13 +23,11 @@ function Dashboard() {
       try {
         const [membersRes, invitationsRes, choresRes] = await Promise.all([
           axiosInstance.get(`/api/family/${familyId}/getfamilymembers`),
-          axiosInstance.get(`/api/family/${familyId}/invitations`),
-          axiosInstance.get('/api/chorelog/recent/5')
+          axiosInstance.get(`/api/invitations/family/${familyId}`),
         ]);
 
         setFamilyMembers(membersRes.data);
         setInvitations(invitationsRes.data);
-        setRecentChores(choresRes.data);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -43,7 +41,7 @@ function Dashboard() {
       try {
         const [membersRes, choresRes] = await Promise.all([
           axiosInstance.get(`/api/family/${familyId}/getfamilymembers`),
-          axiosInstance.get('/api/chores') // Assuming this endpoint returns all chores
+          axiosInstance.get(`/api/chore/getall/${familyId}`)
         ]);
 
         const members = membersRes.data;
