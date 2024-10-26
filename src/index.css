@@ -12,8 +12,37 @@ code {
     monospace;
 }
 
+.dashboard-stack {
+  gap: 12px;
+}
+
+.dashboard-card-wrapper {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
 .dashboard-card {
   border: 1px solid #172d13;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 100%;
+}
+
+@media (min-width: 600px) {
+  .dashboard-card-wrapper {
+    width: calc(50% - 12px);
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .dashboard-card-wrapper {
+    width: calc(33.33% - 16px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-card-wrapper {
+    width: calc(25% - 18px);
+  }
 }

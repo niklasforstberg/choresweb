@@ -102,20 +102,20 @@ function AddChoreLog() {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToShow: 5,  // Increased from 3 to 5
+    slidesToScroll: 2,  // Changed from 1 to 2
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToShow: 4,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
@@ -132,7 +132,7 @@ function AddChoreLog() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={sv}>
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4, maxWidth: '100%', overflow: 'hidden' }}>
         <Typography variant="h4" gutterBottom>
           Add Chore Entry
         </Typography>
@@ -140,54 +140,66 @@ function AddChoreLog() {
         <Typography variant="h6" gutterBottom>
           Select Family Member
         </Typography>
-        <Slider {...sliderSettings}>
-          {familyMembers.map((member) => (
-            <div key={member.id}>
-              <Card
-                sx={{
-                  m: 1,
-                  cursor: "pointer",
-                  bgcolor:
-                    selectedMember?.id === member.id
-                      ? "primary.light"
-                      : "background.paper",
-                }}
-                onClick={() => handleMemberSelect(member)}
-              >
-                <CardContent>
-                  <Typography>
-                    {member.firstName} {member.lastName}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </Slider>
+        <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
+          <Slider {...sliderSettings}>
+            {familyMembers.map((member) => (
+              <div key={member.id} style={{ padding: '0 5px' }}>
+                <Card
+                  sx={{
+                    cursor: "pointer",
+                    bgcolor:
+                      selectedMember?.id === member.id
+                        ? "primary.light"
+                        : "background.paper",
+                    height: '60px',  // Reduced height
+                    width: '120px',  // Set a fixed width
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onClick={() => handleMemberSelect(member)}
+                >
+                  <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
+                    <Typography variant="body2" align="center">
+                      {member.firstName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </Slider>
+        </Box>
 
         <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
           Select Chore
         </Typography>
-        <Slider {...sliderSettings}>
-          {chores.map((chore) => (
-            <div key={chore.id}>
-              <Card
-                sx={{
-                  m: 1,
-                  cursor: "pointer",
-                  bgcolor:
-                    selectedChore?.id === chore.id
-                      ? "primary.light"
-                      : "background.paper",
-                }}
-                onClick={() => handleChoreSelect(chore)}
-              >
-                <CardContent>
-                  <Typography>{chore.name}</Typography>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </Slider>
+        <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
+          <Slider {...sliderSettings}>
+            {chores.map((chore) => (
+              <div key={chore.id}>
+                <Card
+                  sx={{
+                    m: 1,
+                    cursor: "pointer",
+                    bgcolor:
+                      selectedChore?.id === chore.id
+                        ? "primary.light"
+                        : "background.paper",
+                    height: '60px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onClick={() => handleChoreSelect(chore)}
+                >
+                  <CardContent>
+                    <Typography>{chore.name}</Typography>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </Slider>
+        </Box>
 
         <Box sx={{ mt: 4 }}>
           <DateTimePicker

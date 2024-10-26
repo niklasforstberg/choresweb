@@ -7,12 +7,14 @@ import PeopleIcon from '@mui/icons-material/People';
 import MailIcon from '@mui/icons-material/Mail';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 // Dashboard component for displaying user's dashboard
 function Dashboard() {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [choreData, setChoreData] = useState([]);
+  const [recentChores, setRecentChores] = useState([]);
 
   const familyName = localStorage.getItem('familyName');
   const userName = `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')}`;
@@ -72,10 +74,28 @@ function Dashboard() {
     fetchChoreData();
   }, [familyId]);
 
+  useEffect(() => {
+    const fetchRecentChores = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/chorelog/recent/3`);
+        setRecentChores(response.data);
+      } catch (error) {
+        console.error('Error fetching recent chores:', error);
+      }
+    };
+
+    fetchRecentChores();
+  }, []);
+
   return (
-    <Stack direction="row" flexWrap="wrap" spacing={3} sx={{ padding: 3 }}>
+    <Stack 
+      className="dashboard-stack"
+      direction={{ xs: 'column', sm: 'row' }} 
+      flexWrap="wrap" 
+      sx={{ padding: 3 }}
+    >
       {/* Family Members Card */}
-      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+      <Stack className="dashboard-card-wrapper">
         <Card className="dashboard-card">
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -93,32 +113,8 @@ function Dashboard() {
         </Card>
       </Stack>
 
-      {/* Active Invitations Card */}
-      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
-        <Card className="dashboard-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              <MailIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
-              Active Invitations
-            </Typography>
-            <List>
-              {invitations.map((invitation) => (
-                <ListItem key={invitation.id}>
-                  <ListItemText primary={invitation.InviteeEmail} />
-                  <Chip 
-                    label={invitation.Status} 
-                    color={invitation.Status === 'Accepted' ? 'success' : 'default'} 
-                    size="small" 
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
-      </Stack>
-
       {/* Chore Statistics Card */}
-      <Stack sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' } }}>
+      <Stack className="dashboard-card-wrapper">
         <Card className="dashboard-card">
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -142,7 +138,62 @@ function Dashboard() {
           </CardContent>
         </Card>
       </Stack>
+
+      {/* Active Invitations Card */}
+      <Stack className="dashboard-card-wrapper">
+        <Card className="dashboard-card">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <MailIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Active Invitations
+            </Typography>
+            <List sx={{ maxHeight: 200, overflow: 'auto' }}>
+              {invitations.map((invitation) => (
+                <ListItem key={invitation.id} disablePadding>
+                  <ListItemButton>
+                    <ListItemText 
+                      primary={invitation.inviteeEmail} 
+                      primaryTypographyProps={{ noWrap: true }}
+                    />
+                    <Chip 
+                      label={invitation.status} 
+                      color={invitation.status === 'Accepted' ? 'success' : 'default'} 
+                      size="small" 
+                      sx={{ ml: 1, flexShrink: 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        </Card>
+      </Stack>
+
+      {/* Recent Chores Card */}
+      <Stack className="dashboard-card-wrapper">
+        <Card className="dashboard-card">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              <CheckCircleOutlineIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+              Recent Chores
+            </Typography>
+            <List>
+              {recentChores.map((chore, index) => (
+                <ListItem key={index} disablePadding>
+                  <ListItemText
+                    primary={chore.choreName}
+                    secondary={`${chore.userName} - ${new Date(chore.completedAt).toLocaleDateString()}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        </Card>
+      </Stack>
+
     </Stack>
+
+
   );
 }
 

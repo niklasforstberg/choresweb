@@ -63,7 +63,7 @@ function ManageChores() {
     <Container maxWidth="sm">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Manage Chores
+          Family Chores
         </Typography>
         {error && <Typography color="error">{error}</Typography>}
         
@@ -84,8 +84,10 @@ function ManageChores() {
             No chores found. Add a new chore below.
           </Typography>
         )}
-
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
+        <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
+          Add a chore
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -96,6 +98,7 @@ function ManageChores() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          
           <TextField
             margin="normal"
             required

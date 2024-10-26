@@ -78,7 +78,7 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} fullName={userInfo.fullName} />
         
         {/* Main content container */}
-        <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>
+        <Container component="main" sx={{ mt: 1, mb: 4, flex: 1 }}>
           <Routes>
             {/* Route for home page, redirects to dashboard if logged in */}
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
