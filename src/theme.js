@@ -16,6 +16,7 @@ const theme = createTheme({
       'Arial',
       'sans-serif',
     ].join(','),
+    fontSize: 12,
   },
 });
 

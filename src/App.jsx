@@ -81,7 +81,7 @@ function App() {
         <Container component="main" sx={{ mt: 1, mb: 4, flex: 1 }}>
           <Routes>
             {/* Route for home page, redirects to dashboard if logged in */}
-            <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+            <Route path="/" element={isLoggedIn ? <Navigate to="/add-chore-log" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
             
             {/* Route for user registration */}
             <Route path="/register" element={<Register onLoginSuccess={handleLoginSuccess} />} />

@@ -102,8 +102,8 @@ function AddChoreLog() {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,  // Increased from 3 to 5
-    slidesToScroll: 2,  // Changed from 1 to 2
+    slidesToShow: 5,
+    slidesToScroll: 2,
     responsive: [
       {
         breakpoint: 1024,
@@ -143,24 +143,24 @@ function AddChoreLog() {
         <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
           <Slider {...sliderSettings}>
             {familyMembers.map((member) => (
-              <div key={member.id} style={{ padding: '0 5px' }}>
+              <div key={member.id}>
                 <Card
                   sx={{
+                    m: 1,
                     cursor: "pointer",
                     bgcolor:
                       selectedMember?.id === member.id
                         ? "primary.light"
                         : "background.paper",
-                    height: '60px',  // Reduced height
-                    width: '120px',  // Set a fixed width
+                    height: '60px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
                   onClick={() => handleMemberSelect(member)}
                 >
-                  <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                    <Typography variant="body2" align="center">
+                  <CardContent>
+                    <Typography align="center">
                       {member.firstName}
                     </Typography>
                   </CardContent>
@@ -193,7 +193,7 @@ function AddChoreLog() {
                   onClick={() => handleChoreSelect(chore)}
                 >
                   <CardContent>
-                    <Typography>{chore.name}</Typography>
+                    <Typography align="center">{chore.name}</Typography>
                   </CardContent>
                 </Card>
               </div>
