@@ -1,0 +1,101 @@
+/* ─── TOKENS ──────────────────────────────────────────────────────────── */
+:root {
+  --c-canvas:   #fbfbfa;
+  --c-surface:  #ffffff;
+  --c-ink:      #1c221e;
+  --c-muted:    #6d746d;
+  --c-hairline: #dcdfda;
+  --c-action:   #0f4d3a;
+  --c-on-action: #ffffff;
+  --c-error:    #8a2222;
+
+  --f-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-canvas:   #131513;
+    --c-surface:  #191c19;
+    --c-ink:      #e4e7e1;
+    --c-muted:    #9aa39a;
+    --c-hairline: #2c312c;
+    --c-action:   #6cb493;
+    --c-on-action: #131513;
+    --c-error:    #d07070;
+  }
+}
+
+/* ─── BASE ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--c-canvas);
+  color: var(--c-ink);
+  font-family: var(--f-body);
+  line-height: 1.5;
+}
+
+a { color: var(--c-action); }
+
+input {
+  font: inherit;
+  color: inherit;
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  padding: 8px 10px;
+}
+
+button { font: inherit; cursor: pointer; }
+
+.btn-primary {
+  background: var(--c-action);
+  color: var(--c-on-action);
+  border: none;
+  padding: 10px 14px;
+}
+.btn-primary:disabled { opacity: .6; cursor: default; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--c-muted);
+}
+
+.muted { color: var(--c-muted); }
+.error { color: var(--c-error); margin: 0; }
+
+/* ─── LAYOUT ──────────────────────────────────────────────────────────── */
+.layout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--c-hairline);
+  background: var(--c-surface);
+}
+.brand { font-weight: 600; }
+.layout-main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+/* ─── AUTH ────────────────────────────────────────────────────────────── */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+}
+.auth-card h1 { margin: 0 0 4px; font-size: 1.5rem; }
+.auth-card label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; }

@@ -1,0 +1,7 @@
+services:
+  choresweb:
+    build: .
+    container_name: choresweb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5105:80"

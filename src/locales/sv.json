@@ -1,0 +1,20 @@
+{
+  "common": {
+    "appName": "Chores",
+    "serverUnavailable": "Servern svarar inte just nu. Försök igen om en stund."
+  },
+  "auth": {
+    "email": "E-post",
+    "password": "Lösenord",
+    "name": "Namn",
+    "login": "Logga in",
+    "register": "Skapa konto",
+    "noAccount": "Inget konto?",
+    "haveAccount": "Har du redan ett konto?",
+    "logout": "Logga ut",
+    "loginFailed": "Fel e-post eller lösenord."
+  },
+  "home": {
+    "greeting": "Hej {{name}}!"
+  }
+}

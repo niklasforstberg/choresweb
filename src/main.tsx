@@ -1,0 +1,34 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./styles/global.css";
+import "./i18n";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+import Layout from "./components/Layout";
+import AuthGuard from "./components/AuthGuard";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
+});
+
+const router = createBrowserRouter([
+  { path: "/register", element: <Register /> },
+  {
+    path: "/",
+    element: <AuthGuard><Layout /></AuthGuard>,
+    children: [
+      { index: true, element: <Home /> },
+    ],
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </React.StrictMode>
+);
