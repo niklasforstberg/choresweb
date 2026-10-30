@@ -16,7 +16,7 @@ export default function Register() {
     setBusy(true);
     setError(null);
     try {
-      await register({ email, password, name: name || undefined });
+      await register({ email, password, name });
       window.location.href = "/";
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -30,7 +30,7 @@ export default function Register() {
         <h1>{t("auth.register")}</h1>
         <label>
           {t("auth.name")}
-          <input autoComplete="name" value={name} onChange={e => setName(e.target.value)} />
+          <input autoComplete="given-name" value={name} onChange={e => setName(e.target.value)} required />
         </label>
         <label>
           {t("auth.email")}

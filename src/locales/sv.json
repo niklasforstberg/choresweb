@@ -1,12 +1,17 @@
 {
   "common": {
     "appName": "Chores",
+    "save": "Spara",
     "serverUnavailable": "Servern svarar inte just nu. Försök igen om en stund."
+  },
+  "nav": {
+    "week": "Vecka",
+    "household": "Hushåll"
   },
   "auth": {
     "email": "E-post",
     "password": "Lösenord",
-    "name": "Namn",
+    "name": "Förnamn",
     "login": "Logga in",
     "register": "Skapa konto",
     "noAccount": "Inget konto?",
@@ -14,7 +19,43 @@
     "logout": "Logga ut",
     "loginFailed": "Fel e-post eller lösenord."
   },
-  "home": {
-    "greeting": "Hej {{name}}!"
+  "noHousehold": {
+    "title": "Välkommen",
+    "intro": "Skapa ett hushåll, eller gå med i ett med koden som någon i hushållet har.",
+    "createTitle": "Nytt hushåll",
+    "name": "Namn på hushållet",
+    "create": "Skapa",
+    "joinTitle": "Gå med",
+    "code": "Kod",
+    "join": "Gå med"
+  },
+  "week": {
+    "title": "Vecka {{number}}",
+    "previous": "Föregående vecka",
+    "next": "Nästa vecka",
+    "thisWeek": "Denna vecka",
+    "mine": "Mina",
+    "noChores": "Inga sysslor än. Lägg till dem under Hushåll.",
+    "planned": "planerad",
+    "done": "klar",
+    "add": "Planera",
+    "remove": "Ta bort",
+    "markDone": "Markera som klar",
+    "markPlanned": "Markera som inte klar",
+    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. Mina visar hur många du har gjort av veckans kvot, och +antal planerade."
+  },
+  "household": {
+    "members": "Medlemmar",
+    "inviteHelp": "Ge den här koden till den som ska gå med:",
+    "chores": "Sysslor",
+    "choresHelp": "Kvoten är hur många gånger var och en ska göra sysslan per vecka. Lämna tomt om den görs vid behov.",
+    "choreName": "Syssla",
+    "weeklyTarget": "Gånger per vecka och person",
+    "weeklyTargetShort": "Ggr/v",
+    "addChore": "Lägg till",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ner",
+    "deleteChore": "Ta bort syssla",
+    "confirmDelete": "Ta bort {{name}}? Alla tidigare veckors markeringar för sysslan försvinner också."
   }
 }

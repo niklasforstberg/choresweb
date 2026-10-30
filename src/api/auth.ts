@@ -8,7 +8,7 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  name?: string;
+  name: string;
 }
 
 export async function login(req: LoginRequest): Promise<void> {

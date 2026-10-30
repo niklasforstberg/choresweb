@@ -1,12 +1,17 @@
 {
   "common": {
     "appName": "Chores",
+    "save": "Save",
     "serverUnavailable": "The server isn't responding right now. Try again in a moment."
+  },
+  "nav": {
+    "week": "Week",
+    "household": "Household"
   },
   "auth": {
     "email": "Email",
     "password": "Password",
-    "name": "Name",
+    "name": "First name",
     "login": "Log in",
     "register": "Create account",
     "noAccount": "No account?",
@@ -14,7 +19,43 @@
     "logout": "Log out",
     "loginFailed": "Wrong email or password."
   },
-  "home": {
-    "greeting": "Hi {{name}}!"
+  "noHousehold": {
+    "title": "Welcome",
+    "intro": "Create a household, or join one with the code someone in it has.",
+    "createTitle": "New household",
+    "name": "Household name",
+    "create": "Create",
+    "joinTitle": "Join",
+    "code": "Code",
+    "join": "Join"
+  },
+  "week": {
+    "title": "Week {{number}}",
+    "previous": "Previous week",
+    "next": "Next week",
+    "thisWeek": "This week",
+    "mine": "Mine",
+    "noChores": "No chores yet. Add them under Household.",
+    "planned": "planned",
+    "done": "done",
+    "add": "Plan",
+    "remove": "Remove",
+    "markDone": "Mark as done",
+    "markPlanned": "Mark as not done",
+    "legend": "Tap + to plan yourself in. Tap your letter once it's done. Mine shows how many you've done of the week's target, plus the number planned."
+  },
+  "household": {
+    "members": "Members",
+    "inviteHelp": "Give this code to whoever is joining:",
+    "chores": "Chores",
+    "choresHelp": "The target is how many times each member should do the chore per week. Leave it empty for chores done when needed.",
+    "choreName": "Chore",
+    "weeklyTarget": "Times per week per person",
+    "weeklyTargetShort": "Per wk",
+    "addChore": "Add",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "deleteChore": "Delete chore",
+    "confirmDelete": "Delete {{name}}? Its entries from earlier weeks are deleted too."
   }
 }
