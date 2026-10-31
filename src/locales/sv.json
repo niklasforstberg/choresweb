@@ -39,6 +39,7 @@
     "planned": "planerad",
     "done": "klar",
     "add": "Planera",
+    "addDone": "Lägg till som gjord",
     "remove": "Ta bort",
     "markDone": "Markera som klar",
     "markPlanned": "Markera som inte klar",

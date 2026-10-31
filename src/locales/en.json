@@ -39,6 +39,7 @@
     "planned": "planned",
     "done": "done",
     "add": "Plan",
+    "addDone": "Add as done",
     "remove": "Remove",
     "markDone": "Mark as done",
     "markPlanned": "Mark as not done",

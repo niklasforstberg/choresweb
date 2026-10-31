@@ -119,11 +119,9 @@ export default function Week() {
                                 </span>
                               );
                             })}
-                            {date >= today && (
-                              <button className="cell-add" onClick={() => add.mutate({ choreId: chore.id, date })} aria-label={t("week.add")}>
-                                <Plus size={14} />
-                              </button>
-                            )}
+                            <button className="cell-add" onClick={() => add.mutate({ choreId: chore.id, date })} aria-label={t(date < today ? "week.addDone" : "week.add")}>
+                              <Plus size={14} />
+                            </button>
                           </div>
                         </td>
                       );
