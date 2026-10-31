@@ -241,6 +241,7 @@ h2 { margin: 0; font-size: 1.1rem; }
   color: inherit;
   font-weight: inherit;
 }
+.chip-main:disabled { cursor: default; }
 .chip-remove {
   display: inline-grid;
   place-items: center;

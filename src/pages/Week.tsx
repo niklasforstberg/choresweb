@@ -106,7 +106,7 @@ export default function Week() {
                                 >
                                   {own ? (
                                     <>
-                                      <button className="chip-main" onClick={() => toggle.mutate(e)} aria-label={t(e.completed ? "week.markPlanned" : "week.markDone")}>
+                                      <button className="chip-main" onClick={() => toggle.mutate(e)} disabled={!e.completed && date > today} aria-label={t(e.completed ? "week.markPlanned" : "week.markDone")}>
                                         {labels.get(e.userId)}{e.completed && <Check size={12} />}
                                       </button>
                                       {!e.completed && (
@@ -119,9 +119,11 @@ export default function Week() {
                                 </span>
                               );
                             })}
-                            <button className="cell-add" onClick={() => add.mutate({ choreId: chore.id, date })} aria-label={t("week.add")}>
-                              <Plus size={14} />
-                            </button>
+                            {date >= today && (
+                              <button className="cell-add" onClick={() => add.mutate({ choreId: chore.id, date })} aria-label={t("week.add")}>
+                                <Plus size={14} />
+                              </button>
+                            )}
                           </div>
                         </td>
                       );
