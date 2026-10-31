@@ -57,5 +57,20 @@
     "moveDown": "Flytta ner",
     "deleteChore": "Ta bort syssla",
     "confirmDelete": "Ta bort {{name}}? Alla tidigare veckors markeringar för sysslan försvinner också."
+  },
+  "menu": {
+    "open": "Öppna menyn",
+    "account": "Mitt konto"
+  },
+  "account": {
+    "profile": "Uppgifter",
+    "currentPassword": "Nuvarande lösenord",
+    "emailNeedsPassword": "Krävs för att byta e-post, eftersom den är din inloggning.",
+    "saved": "Sparat.",
+    "changePassword": "Byt lösenord",
+    "newPassword": "Nytt lösenord",
+    "repeatPassword": "Upprepa nytt lösenord",
+    "passwordMismatch": "Lösenorden stämmer inte överens.",
+    "passwordChanged": "Lösenordet är bytt."
   }
 }

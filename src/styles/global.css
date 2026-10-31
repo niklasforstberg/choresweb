@@ -67,6 +67,8 @@ button { font: inherit; cursor: pointer; }
 
 .muted { color: var(--c-muted); }
 .error { color: var(--c-error); margin: 0; }
+.success { color: var(--c-action); margin: 0; }
+.hint { font-size: .8rem; }
 
 /* ─── LAYOUT ──────────────────────────────────────────────────────────── */
 .layout-header {
@@ -130,9 +132,54 @@ h2 { margin: 0; font-size: 1.1rem; }
 .nav a.active { color: var(--c-ink); font-weight: 600; }
 
 @media (max-width: 480px) {
-  .hide-narrow { display: none; }
   .nav { margin-left: 12px; }
 }
+
+/* ─── USER MENU ───────────────────────────────────────────────────────── */
+.user-menu { position: relative; }
+.user-menu-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--c-action);
+  color: var(--c-on-action);
+  font-weight: 600;
+}
+.user-menu-btn:hover { opacity: .85; }
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 10;
+  min-width: 220px;
+  max-width: calc(100vw - 32px);
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  box-shadow: 0 6px 20px rgb(0 0 0 / .12);
+  padding: 4px 0;
+}
+.user-dropdown-header {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px 10px;
+  border-bottom: 1px solid var(--c-hairline);
+  margin-bottom: 4px;
+  font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  color: var(--c-ink);
+  text-align: left;
+}
+.user-dropdown-item:hover, .user-dropdown-item:focus-visible { background: color-mix(in srgb, var(--c-ink) 6%, transparent); }
 
 /* ─── WEEK GRID ───────────────────────────────────────────────────────── */
 .week-header { display: flex; align-items: center; gap: 12px; }

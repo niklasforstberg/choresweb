@@ -10,6 +10,7 @@ import AuthGuard from "./components/AuthGuard";
 import Register from "./pages/Register";
 import Week from "./pages/Week";
 import Household from "./pages/Household";
+import Account from "./pages/Account";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Week /> },
       { path: "household", element: <Household /> },
+      { path: "account", element: <Account /> },
     ],
   },
 ]);

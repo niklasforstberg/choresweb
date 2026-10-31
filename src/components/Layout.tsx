@@ -1,13 +1,13 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { LogOut } from "lucide-react";
-import { logout } from "../api/auth";
 import { getMe } from "../api/users";
 import NoHousehold from "../pages/NoHousehold";
+import UserMenu from "./UserMenu";
 
 export default function Layout() {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: getMe });
 
   return (
@@ -20,12 +20,11 @@ export default function Layout() {
             <NavLink to="/household">{t("nav.household")}</NavLink>
           </nav>
         )}
-        <button className="btn-ghost" onClick={logout}>
-          <LogOut size={16} /> <span className="hide-narrow">{t("auth.logout")}</span>
-        </button>
+        <UserMenu />
       </header>
       <main className="layout-main">
-        {me && (me.householdId == null ? <NoHousehold /> : <Outlet />)}
+        {/* The account page is reachable before joining a household; nothing else is. */}
+        {me && (me.householdId == null && pathname !== "/account" ? <NoHousehold /> : <Outlet />)}
       </main>
     </div>
   );

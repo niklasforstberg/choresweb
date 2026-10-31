@@ -57,5 +57,20 @@
     "moveDown": "Move down",
     "deleteChore": "Delete chore",
     "confirmDelete": "Delete {{name}}? Its entries from earlier weeks are deleted too."
+  },
+  "menu": {
+    "open": "Open menu",
+    "account": "My account"
+  },
+  "account": {
+    "profile": "Details",
+    "currentPassword": "Current password",
+    "emailNeedsPassword": "Needed to change your email, since it's your login.",
+    "saved": "Saved.",
+    "changePassword": "Change password",
+    "newPassword": "New password",
+    "repeatPassword": "Repeat new password",
+    "passwordMismatch": "The passwords don't match.",
+    "passwordChanged": "Your password has been changed."
   }
 }
