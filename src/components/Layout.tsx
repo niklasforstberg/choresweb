@@ -17,6 +17,7 @@ export default function Layout() {
         {me?.householdId != null && (
           <nav className="nav">
             <NavLink to="/" end>{t("nav.week")}</NavLink>
+            <NavLink to="/history">{t("nav.history")}</NavLink>
             <NavLink to="/household">{t("nav.household")}</NavLink>
           </nav>
         )}

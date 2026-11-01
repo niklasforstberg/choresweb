@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import AuthGuard from "./components/AuthGuard";
 import Register from "./pages/Register";
 import Week from "./pages/Week";
+import History from "./pages/History";
 import Household from "./pages/Household";
 import Account from "./pages/Account";
 
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     element: <AuthGuard><Layout /></AuthGuard>,
     children: [
       { index: true, element: <Week /> },
+      { path: "history", element: <History /> },
       { path: "household", element: <Household /> },
       { path: "account", element: <Account /> },
     ],

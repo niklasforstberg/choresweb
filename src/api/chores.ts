@@ -9,12 +9,12 @@ export interface Chore {
 
 export type SaveChore = Omit<Chore, "id">;
 
-export interface ChoreEntry {
+// A claim takes a chore on today or a day to come; a completion records one done today or earlier.
+export interface ChoreDayEntry {
   id: number;
   choreId: number;
   userId: number;
   date: string; // YYYY-MM-DD
-  completed: boolean;
 }
 
 export const getChores = (): Promise<Chore[]> => apiFetch("/api/chores");
@@ -28,14 +28,24 @@ export const updateChore = (id: number, chore: SaveChore): Promise<Chore> =>
 export const deleteChore = (id: number): Promise<void> =>
   apiFetch(`/api/chores/${id}`, { method: "DELETE" });
 
-export const getEntries = (weekStart: string): Promise<ChoreEntry[]> =>
-  apiFetch(`/api/entries?weekStart=${weekStart}`);
+export const getClaims = (from: string, to: string): Promise<ChoreDayEntry[]> =>
+  apiFetch(`/api/claims?from=${from}&to=${to}`);
 
-export const createEntry = (choreId: number, date: string): Promise<ChoreEntry> =>
-  apiFetch("/api/entries", { method: "POST", body: JSON.stringify({ choreId, date }) });
+export const createClaim = (choreId: number, date: string): Promise<ChoreDayEntry> =>
+  apiFetch("/api/claims", { method: "POST", body: JSON.stringify({ choreId, date }) });
 
-export const setEntryCompleted = (id: number, completed: boolean): Promise<ChoreEntry> =>
-  apiFetch(`/api/entries/${id}`, { method: "PATCH", body: JSON.stringify({ completed }) });
+// Returns the completion that replaces the claim.
+export const completeClaim = (id: number): Promise<ChoreDayEntry> =>
+  apiFetch(`/api/claims/${id}/complete`, { method: "POST" });
 
-export const deleteEntry = (id: number): Promise<void> =>
-  apiFetch(`/api/entries/${id}`, { method: "DELETE" });
+export const deleteClaim = (id: number): Promise<void> =>
+  apiFetch(`/api/claims/${id}`, { method: "DELETE" });
+
+export const getCompletions = (from: string, to: string): Promise<ChoreDayEntry[]> =>
+  apiFetch(`/api/completions?from=${from}&to=${to}`);
+
+export const createCompletion = (choreId: number, date: string): Promise<ChoreDayEntry> =>
+  apiFetch("/api/completions", { method: "POST", body: JSON.stringify({ choreId, date }) });
+
+export const deleteCompletion = (id: number): Promise<void> =>
+  apiFetch(`/api/completions/${id}`, { method: "DELETE" });

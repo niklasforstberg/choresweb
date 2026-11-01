@@ -6,6 +6,7 @@
   },
   "nav": {
     "week": "Week",
+    "history": "History",
     "household": "Household"
   },
   "auth": {
@@ -34,7 +35,6 @@
     "previous": "Previous week",
     "next": "Next week",
     "thisWeek": "This week",
-    "mine": "Mine",
     "noChores": "No chores yet. Add them under Household.",
     "planned": "planned",
     "done": "done",
@@ -42,8 +42,18 @@
     "addDone": "Add as done",
     "remove": "Remove",
     "markDone": "Mark as done",
-    "markPlanned": "Mark as not done",
-    "legend": "Tap + to plan yourself in. Tap your letter once it's done. Mine shows how many you've done of the week's target, plus the number planned."
+    "legend": "Tap + to plan yourself in. Tap your letter once it's done. On a day that has passed, + adds the chore as done straight away."
+  },
+  "summary": {
+    "title": "Summary",
+    "total": "Total"
+  },
+  "history": {
+    "title": "History",
+    "weeks4": "4 weeks",
+    "months3": "3 months",
+    "months12": "12 months",
+    "since": "Since {{date}}. The number after the slash is the target for the whole period."
   },
   "household": {
     "members": "Members",

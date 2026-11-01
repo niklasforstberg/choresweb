@@ -6,6 +6,7 @@
   },
   "nav": {
     "week": "Vecka",
+    "history": "Historik",
     "household": "Hushåll"
   },
   "auth": {
@@ -34,7 +35,6 @@
     "previous": "Föregående vecka",
     "next": "Nästa vecka",
     "thisWeek": "Denna vecka",
-    "mine": "Mina",
     "noChores": "Inga sysslor än. Lägg till dem under Hushåll.",
     "planned": "planerad",
     "done": "klar",
@@ -42,8 +42,18 @@
     "addDone": "Lägg till som gjord",
     "remove": "Ta bort",
     "markDone": "Markera som klar",
-    "markPlanned": "Markera som inte klar",
-    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. Mina visar hur många du har gjort av veckans kvot, och +antal planerade."
+    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. På en dag som har varit lägger + in sysslan som gjord direkt."
+  },
+  "summary": {
+    "title": "Summering",
+    "total": "Totalt"
+  },
+  "history": {
+    "title": "Historik",
+    "weeks4": "4 veckor",
+    "months3": "3 månader",
+    "months12": "12 månader",
+    "since": "Sedan {{date}}. Siffran efter snedstrecket är kvoten för hela perioden."
   },
   "household": {
     "members": "Medlemmar",
