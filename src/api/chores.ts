@@ -17,6 +17,11 @@ export interface ChoreDayEntry {
   date: string; // YYYY-MM-DD
 }
 
+// Any member may record a chore as done by another, so recordedById can differ from userId.
+export interface ChoreCompletion extends ChoreDayEntry {
+  recordedById: number;
+}
+
 export const getChores = (): Promise<Chore[]> => apiFetch("/api/chores");
 
 export const createChore = (chore: SaveChore): Promise<Chore> =>
@@ -35,17 +40,17 @@ export const createClaim = (choreId: number, date: string): Promise<ChoreDayEntr
   apiFetch("/api/claims", { method: "POST", body: JSON.stringify({ choreId, date }) });
 
 // Returns the completion that replaces the claim.
-export const completeClaim = (id: number): Promise<ChoreDayEntry> =>
+export const completeClaim = (id: number): Promise<ChoreCompletion> =>
   apiFetch(`/api/claims/${id}/complete`, { method: "POST" });
 
 export const deleteClaim = (id: number): Promise<void> =>
   apiFetch(`/api/claims/${id}`, { method: "DELETE" });
 
-export const getCompletions = (from: string, to: string): Promise<ChoreDayEntry[]> =>
+export const getCompletions = (from: string, to: string): Promise<ChoreCompletion[]> =>
   apiFetch(`/api/completions?from=${from}&to=${to}`);
 
-export const createCompletion = (choreId: number, date: string): Promise<ChoreDayEntry> =>
-  apiFetch("/api/completions", { method: "POST", body: JSON.stringify({ choreId, date }) });
+export const createCompletion = (choreId: number, date: string, userId: number): Promise<ChoreCompletion> =>
+  apiFetch("/api/completions", { method: "POST", body: JSON.stringify({ choreId, date, userId }) });
 
 export const deleteCompletion = (id: number): Promise<void> =>
   apiFetch(`/api/completions/${id}`, { method: "DELETE" });

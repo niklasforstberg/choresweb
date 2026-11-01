@@ -2,15 +2,17 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { getMe } from "../api/users";
 import { getHousehold } from "../api/household";
 import {
-  completeClaim, createClaim, createCompletion, deleteClaim, deleteCompletion, getChores, getClaims, getCompletions, type ChoreDayEntry,
+  completeClaim, createClaim, createCompletion, deleteClaim, deleteCompletion, getChores, getClaims, getCompletions,
+  type ChoreCompletion, type ChoreDayEntry,
 } from "../api/chores";
 import { addDays, isoWeekNumber, mondayOf, parseIsoDate, toIsoDate } from "../lib/week";
 import { memberColors, memberLabels } from "../lib/members";
 import Summary from "../components/Summary";
+import Picker from "../components/Picker";
 
 // The grid needs room for seven columns; narrower screens get one day at a time instead.
 const NARROW = window.matchMedia("(max-width: 700px)");
@@ -48,15 +50,15 @@ export default function Week() {
     queryClient.invalidateQueries({ queryKey: ["claims"] }),
     queryClient.invalidateQueries({ queryKey: ["completions"] }),
   ]);
-  // On a day that has passed there is nothing left to plan; + logs the chore as done instead.
-  const add = useMutation({
-    mutationFn: (v: { choreId: number; date: string }) => (v.date < today ? createCompletion : createClaim)(v.choreId, v.date),
+  const plan = useMutation({ mutationFn: (v: { choreId: number; date: string }) => createClaim(v.choreId, v.date), onSuccess });
+  const record = useMutation({
+    mutationFn: (v: { choreId: number; date: string; userId: number }) => createCompletion(v.choreId, v.date, v.userId),
     onSuccess,
   });
   const complete = useMutation({ mutationFn: (c: ChoreDayEntry) => completeClaim(c.id), onSuccess });
   const unclaim = useMutation({ mutationFn: (c: ChoreDayEntry) => deleteClaim(c.id), onSuccess });
-  const uncomplete = useMutation({ mutationFn: (c: ChoreDayEntry) => deleteCompletion(c.id), onSuccess });
-  const error = add.error ?? complete.error ?? unclaim.error ?? uncomplete.error;
+  const uncomplete = useMutation({ mutationFn: (c: ChoreCompletion) => deleteCompletion(c.id), onSuccess });
+  const error = plan.error ?? record.error ?? complete.error ?? unclaim.error ?? uncomplete.error;
 
   // On a narrow screen only a few days fit; start with today in view rather than Monday.
   const gridRef = useRef<HTMLDivElement>(null);
@@ -74,34 +76,56 @@ export default function Week() {
   const weekday = new Intl.DateTimeFormat(i18n.language, { weekday: "short" });
 
   const onDay = (choreId: number, date: string) => (e: ChoreDayEntry) => e.choreId === choreId && e.date === date;
-  const chip = (e: ChoreDayEntry, done: boolean) => {
+  const claimChip = (e: ChoreDayEntry) => {
     const own = e.userId === me.id;
     return (
-      <span
-        key={`${done ? "done" : "claim"}-${e.id}`}
-        className={`chip${done ? " done" : ""}`}
-        style={{ "--chip": colors.get(e.userId) } as React.CSSProperties}
-        title={`${names.get(e.userId)} – ${t(done ? "week.done" : "week.planned")}`}
-      >
-        {own && !done ? (
+      <span key={`claim-${e.id}`} className="chip" style={{ "--chip": colors.get(e.userId) } as React.CSSProperties}
+        title={`${names.get(e.userId)} – ${t("week.planned")}`}>
+        {/* Anyone may tick off a claim once its day has come, e.g. one its member forgot. */}
+        {own || e.date <= today ? (
           <button className="chip-main" onClick={() => complete.mutate(e)} disabled={e.date > today} aria-label={t("week.markDone")}>
             {labels.get(e.userId)}
           </button>
         ) : (
-          <span className="chip-main">{labels.get(e.userId)}{done && <Check size={12} />}</span>
+          <span className="chip-main">{labels.get(e.userId)}</span>
         )}
         {own && (
-          <button className="chip-remove" onClick={() => (done ? uncomplete : unclaim).mutate(e)} aria-label={t("week.remove")}>
-            <X size={12} />
-          </button>
+          <button className="chip-remove" onClick={() => unclaim.mutate(e)} aria-label={t("week.remove")}><X size={12} /></button>
+        )}
+      </span>
+    );
+  };
+  const completionChip = (e: ChoreCompletion) => {
+    const byOther = e.recordedById !== e.userId;
+    const recordedBy = names.get(e.recordedById) ?? "?";
+    return (
+      <span key={`done-${e.id}`} className="chip done" style={{ "--chip": colors.get(e.userId) } as React.CSSProperties}
+        title={`${names.get(e.userId)} – ${t("week.done")}${byOther ? `, ${t("week.markedBy", { name: recordedBy })}` : ""}`}>
+        <span className="chip-main">
+          {labels.get(e.userId)}<Check size={12} />
+          {byOther && <span className="chip-by">{t("week.by", { label: labels.get(e.recordedById) ?? "?" })}</span>}
+        </span>
+        {(e.userId === me.id || e.recordedById === me.id) && (
+          <button className="chip-remove" onClick={() => uncomplete.mutate(e)} aria-label={t("week.remove")}><X size={12} /></button>
         )}
       </span>
     );
   };
   const chips = (choreId: number, date: string) => [
-    ...completions.filter(onDay(choreId, date)).map(e => chip(e, true)),
-    ...claims.filter(onDay(choreId, date)).map(e => chip(e, false)),
+    ...completions.filter(onDay(choreId, date)).map(completionChip),
+    ...claims.filter(onDay(choreId, date)).map(claimChip),
   ];
+
+  // Marking a member done ticks off their claim for the day if they have one.
+  const markDone = (choreId: number, date: string, userId: number) => {
+    const claim = claims.find(c => onDay(choreId, date)(c) && c.userId === userId);
+    if (claim) complete.mutate(claim);
+    else record.mutate({ choreId, date, userId });
+  };
+  // Me first, as that's the usual pick.
+  const doneByOptions = [...household.members]
+    .sort((a, b) => (a.id === me.id ? -1 : b.id === me.id ? 1 : 0))
+    .map(m => ({ value: String(m.id), label: t("week.doneBy", { name: m.id === me.id ? t("week.me") : m.name }) }));
 
   return (
     <div className="stack">
@@ -140,6 +164,13 @@ export default function Week() {
               const myDone = completions.filter(e => e.choreId === chore.id && e.userId === me.id).length;
               // Done only once the day has come: by ticking off my claim, or straight away on a day that has passed.
               const canDo = myClaim ? day <= today : day < today;
+              const action = (
+                canDo ? (
+                  <button className="btn-primary day-action" onClick={() => markDone(chore.id, day, me.id)}>{t("week.doneShort")}</button>
+                ) : (
+                  <button className="btn-ghost day-action" onClick={() => plan.mutate({ choreId: chore.id, date: day })}>{t("week.add")}</button>
+                )
+              );
               return (
                 <li key={chore.id} className="day-row">
                   <div className="day-row-main">
@@ -153,15 +184,15 @@ export default function Week() {
                     </div>
                     <div className="cell">{chips(chore.id, day)}</div>
                   </div>
-                  {canDo ? (
-                    <button className="btn-primary day-action" onClick={() => (myClaim ? complete.mutate(myClaim) : add.mutate({ choreId: chore.id, date: day }))}>
-                      {t("week.doneShort")}
-                    </button>
-                  ) : (
-                    <button className="btn-ghost day-action" onClick={() => add.mutate({ choreId: chore.id, date: day })}>
-                      {t("week.add")}
-                    </button>
-                  )}
+                  <div className="day-actions">
+                    {action}
+                    {day <= today && (
+                      <Picker className="btn-ghost day-more" label={t("week.pickDoneBy")} options={doneByOptions}
+                        onPick={v => markDone(chore.id, day, Number(v))}>
+                        <ChevronDown size={18} />
+                      </Picker>
+                    )}
+                  </div>
                 </li>
               );
             })}
@@ -193,9 +224,21 @@ export default function Week() {
                       <td key={date} className={date === today ? "today" : undefined}>
                         <div className="cell">
                           {chips(chore.id, date)}
-                          <button className="cell-add" onClick={() => add.mutate({ choreId: chore.id, date })} aria-label={t(date < today ? "week.addDone" : "week.add")}>
-                            <Plus size={14} />
-                          </button>
+                          {date > today ? (
+                            <button className="cell-add" onClick={() => plan.mutate({ choreId: chore.id, date })} aria-label={t("week.add")}>
+                              <Plus size={14} />
+                            </button>
+                          ) : (
+                            // Today can still be planned; any day up to today can be marked done, by anyone.
+                            <Picker
+                              className="cell-add"
+                              label={t(date === today ? "week.planOrDone" : "week.pickDoneBy")}
+                              options={[...(date === today ? [{ value: "plan", label: t("week.add") }] : []), ...doneByOptions]}
+                              onPick={v => (v === "plan" ? plan.mutate({ choreId: chore.id, date }) : markDone(chore.id, date, Number(v)))}
+                            >
+                              <Plus size={14} />
+                            </Picker>
+                          )}
                         </div>
                       </td>
                     );

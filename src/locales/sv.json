@@ -39,13 +39,18 @@
     "planned": "planerad",
     "done": "klar",
     "add": "Planera",
-    "addDone": "Lägg till som gjord",
     "doneShort": "Klar",
     "myWeek": "din vecka {{done}}/{{target}}",
     "remove": "Ta bort",
     "markDone": "Markera som klar",
-    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. På en dag som har varit lägger + in sysslan som gjord direkt.",
-    "legendDay": "Planera tar sysslan den dagen, Klar bockar av den. På en dag som har varit lägger Klar in den som gjord direkt."
+    "legend": "Tryck på + för att planera in dig, eller för att markera vem som har gjort sysslan idag eller tidigare. Tryck på en bokstav när det är gjort.",
+    "legendDay": "Planera tar sysslan den dagen, Klar bockar av den. Med pilen markerar du den som gjord av dig eller någon annan.",
+    "doneBy": "Gjord av {{name}}",
+    "me": "mig",
+    "markedBy": "markerad av {{name}}",
+    "by": "av {{label}}",
+    "pickDoneBy": "Markera som gjord av …",
+    "planOrDone": "Planera eller markera som gjord"
   },
   "summary": {
     "title": "Summering",

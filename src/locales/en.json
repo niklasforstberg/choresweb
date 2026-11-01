@@ -39,13 +39,18 @@
     "planned": "planned",
     "done": "done",
     "add": "Plan",
-    "addDone": "Add as done",
     "doneShort": "Done",
     "myWeek": "your week {{done}}/{{target}}",
     "remove": "Remove",
     "markDone": "Mark as done",
-    "legend": "Tap + to plan yourself in. Tap your letter once it's done. On a day that has passed, + adds the chore as done straight away.",
-    "legendDay": "Plan takes the chore on that day, Done ticks it off. On a day that has passed, Done adds it as done straight away."
+    "legend": "Tap + to plan yourself in, or to mark who did the chore today or earlier. Tap a letter once it's done.",
+    "legendDay": "Plan takes the chore on that day, Done ticks it off. The arrow marks it as done by you or someone else.",
+    "doneBy": "Done by {{name}}",
+    "me": "me",
+    "markedBy": "marked by {{name}}",
+    "by": "by {{label}}",
+    "pickDoneBy": "Mark as done by …",
+    "planOrDone": "Plan or mark as done"
   },
   "summary": {
     "title": "Summary",
