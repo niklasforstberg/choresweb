@@ -91,5 +91,28 @@
     "repeatPassword": "Upprepa nytt lösenord",
     "passwordMismatch": "Lösenorden stämmer inte överens.",
     "passwordChanged": "Lösenordet är bytt."
+  },
+  "landing": {
+    "title": "Sysslorna, utan lappen på kylskåpet.",
+    "lead": "Planera veckan, bocka av det du har gjort och se vem som gör vad. För hela hushållet, i mobilen.",
+    "featuresLabel": "Så fungerar det",
+    "weekdays": "mån tis ons tor fre lör sön",
+    "choreKitchen": "Köket",
+    "choreCook": "Laga mat",
+    "choreTrash": "Soporna",
+    "dayTitle": "Välj din dag",
+    "dayText": "Ta en syssla den dag som passar dig. Alla ser vem som har tagit vad, och ingen bestämmer åt någon annan.",
+    "quotaTitle": "Kvoten syns direkt",
+    "quotaText": "Sysslor som ska göras ett visst antal gånger i veckan visas som prickar, som fylls i takt med att du gör dem.",
+    "forgotTitle": "Bocka av åt den som glömde",
+    "forgotText": "Alla kan markera en syssla som gjord åt någon annan, och det syns vem som gjorde markeringen.",
+    "summaryTitle": "Summeringen räknar åt er",
+    "summaryText": "Se hur sysslorna har fördelats den här veckan eller de senaste månaderna. Inga streck att räkna.",
+    "coloursTitle": "En färg per person",
+    "coloursText": "Alla i hushållet får en egen färg, blandad av samma tre tryckfärger som resten av appen. Rosa och blått blir lila, blått och gult blir grönt.",
+    "inviteTitle": "Bjud in med en kod",
+    "inviteText": "Den som skapar hushållet får en kod på åtta tecken. Resten går med på en minut.",
+    "inviteExample": "Exempel på inbjudningskod",
+    "closingTitle": "Lappen kan gå i pension."
   }
 }

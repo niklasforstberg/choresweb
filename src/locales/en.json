@@ -91,5 +91,28 @@
     "repeatPassword": "Repeat new password",
     "passwordMismatch": "The passwords don't match.",
     "passwordChanged": "Your password has been changed."
+  },
+  "landing": {
+    "title": "Chores, without the sheet on the fridge.",
+    "lead": "Plan the week, tick off what you've done and see who does what. For the whole household, on your phone.",
+    "featuresLabel": "How it works",
+    "weekdays": "Mon Tue Wed Thu Fri Sat Sun",
+    "choreKitchen": "Kitchen",
+    "choreCook": "Cooking",
+    "choreTrash": "Rubbish",
+    "dayTitle": "Pick your day",
+    "dayText": "Take a chore on the day that suits you. Everyone sees who took what, and nobody decides for anyone else.",
+    "quotaTitle": "The quota at a glance",
+    "quotaText": "Chores to be done a set number of times a week show as dots that fill as you do them.",
+    "forgotTitle": "Tick it off for whoever forgot",
+    "forgotText": "Anyone can mark a chore as done for someone else, and it shows who made the mark.",
+    "summaryTitle": "The summary does the counting",
+    "summaryText": "See how the chores were shared this week or over the last few months. No tally marks to add up.",
+    "coloursTitle": "A colour for everyone",
+    "coloursText": "Everyone in the household gets their own colour, mixed from the same three print inks as the rest of the app. Pink and blue make purple, blue and yellow make green.",
+    "inviteTitle": "Invite with a code",
+    "inviteText": "Whoever creates the household gets an eight-character code. Everyone else joins in a minute.",
+    "inviteExample": "Example invite code",
+    "closingTitle": "The sheet on the fridge can retire."
   }
 }

@@ -42,7 +42,7 @@ export default function Register() {
         </label>
         {error && <p className="error">{error}</p>}
         <button className="btn-primary" type="submit" disabled={busy}>{t("auth.register")}</button>
-        <p className="muted">{t("auth.haveAccount")} <Link to="/">{t("auth.login")}</Link></p>
+        <p className="muted">{t("auth.haveAccount")} <Link to="/login">{t("auth.login")}</Link></p>
       </form>
     </div>
   );

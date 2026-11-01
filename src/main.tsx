@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import AuthGuard from "./components/AuthGuard";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 import Week from "./pages/Week";
 import History from "./pages/History";
 import Household from "./pages/Household";
@@ -19,6 +20,7 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
+  { path: "/login", element: <Login /> },
   {
     path: "/",
     element: <AuthGuard><Layout /></AuthGuard>,
