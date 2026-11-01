@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { ChartColumn, House, NotebookPen } from "lucide-react";
 import { getMe } from "../api/users";
 import NoHousehold from "../pages/NoHousehold";
 import UserMenu from "./UserMenu";
@@ -16,9 +17,9 @@ export default function Layout() {
         <span className="brand">{t("common.appName")}</span>
         {me?.householdId != null && (
           <nav className="nav">
-            <NavLink to="/" end>{t("nav.week")}</NavLink>
-            <NavLink to="/history">{t("nav.history")}</NavLink>
-            <NavLink to="/household">{t("nav.household")}</NavLink>
+            <NavLink to="/" end><NotebookPen size={20} aria-hidden="true" />{t("nav.week")}</NavLink>
+            <NavLink to="/history"><ChartColumn size={20} aria-hidden="true" />{t("nav.history")}</NavLink>
+            <NavLink to="/household"><House size={20} aria-hidden="true" />{t("nav.household")}</NavLink>
           </nav>
         )}
         <UserMenu />

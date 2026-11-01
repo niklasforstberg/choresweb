@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h1>{t("common.appName")}</h1>
+        <h1 className="wordmark" data-text={t("common.appName")}>{t("common.appName")}</h1>
         <label>
           {t("auth.email")}
           <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required />

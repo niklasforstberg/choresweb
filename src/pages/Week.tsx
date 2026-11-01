@@ -50,12 +50,15 @@ export default function Week() {
     queryClient.invalidateQueries({ queryKey: ["claims"] }),
     queryClient.invalidateQueries({ queryKey: ["completions"] }),
   ]);
+  // The completion just made lands like a stamp; the rest of the week stays still.
+  const [stamped, setStamped] = useState<number | null>(null);
+  const onDone = (c: ChoreCompletion) => { setStamped(c.id); return onSuccess(); };
   const plan = useMutation({ mutationFn: (v: { choreId: number; date: string }) => createClaim(v.choreId, v.date), onSuccess });
   const record = useMutation({
     mutationFn: (v: { choreId: number; date: string; userId: number }) => createCompletion(v.choreId, v.date, v.userId),
-    onSuccess,
+    onSuccess: onDone,
   });
-  const complete = useMutation({ mutationFn: (c: ChoreDayEntry) => completeClaim(c.id), onSuccess });
+  const complete = useMutation({ mutationFn: (c: ChoreDayEntry) => completeClaim(c.id), onSuccess: onDone });
   const unclaim = useMutation({ mutationFn: (c: ChoreDayEntry) => deleteClaim(c.id), onSuccess });
   const uncomplete = useMutation({ mutationFn: (c: ChoreCompletion) => deleteCompletion(c.id), onSuccess });
   const error = plan.error ?? record.error ?? complete.error ?? unclaim.error ?? uncomplete.error;
@@ -74,12 +77,15 @@ export default function Week() {
 
   const goTo = (d: Date) => setParams(toIsoDate(mondayOf(d)) === toIsoDate(mondayOf(new Date())) ? {} : { week: toIsoDate(d) });
   const weekday = new Intl.DateTimeFormat(i18n.language, { weekday: "short" });
+  const range = new Intl.DateTimeFormat(i18n.language, { day: "numeric", month: "short" });
 
   const onDay = (choreId: number, date: string) => (e: ChoreDayEntry) => e.choreId === choreId && e.date === date;
+  const inkStyle = (userId: number) =>
+    ({ "--chip": colors.get(userId)?.ink, "--chip-on": colors.get(userId)?.on }) as React.CSSProperties;
   const claimChip = (e: ChoreDayEntry) => {
     const own = e.userId === me.id;
     return (
-      <span key={`claim-${e.id}`} className="chip" style={{ "--chip": colors.get(e.userId) } as React.CSSProperties}
+      <span key={`claim-${e.id}`} className="chip" style={inkStyle(e.userId)}
         title={`${names.get(e.userId)} – ${t("week.planned")}`}>
         {/* Anyone may tick off a claim once its day has come, e.g. one its member forgot. */}
         {own || e.date <= today ? (
@@ -99,7 +105,7 @@ export default function Week() {
     const byOther = e.recordedById !== e.userId;
     const recordedBy = names.get(e.recordedById) ?? "?";
     return (
-      <span key={`done-${e.id}`} className="chip done" style={{ "--chip": colors.get(e.userId) } as React.CSSProperties}
+      <span key={`done-${e.id}`} className={`chip done${e.id === stamped ? " stamp" : ""}`} style={inkStyle(e.userId)}
         title={`${names.get(e.userId)} – ${t("week.done")}${byOther ? `, ${t("week.markedBy", { name: recordedBy })}` : ""}`}>
         <span className="chip-main">
           {labels.get(e.userId)}<Check size={12} />
@@ -131,8 +137,14 @@ export default function Week() {
     <div className="stack">
       <div className="week-header">
         <button className="btn-icon" onClick={() => goTo(addDays(monday, -7))} aria-label={t("week.previous")}><ChevronLeft size={18} /></button>
-        <h1>{t("week.title", { number: isoWeekNumber(monday) })}</h1>
+        <h1 className="week-title" aria-label={t("week.title", { number: isoWeekNumber(monday) })}>
+          <span className="week-label" aria-hidden="true">{t("nav.week")}</span>
+          <span className="week-number" data-n={isoWeekNumber(monday)} aria-hidden="true">{isoWeekNumber(monday)}</span>
+        </h1>
         <button className="btn-icon" onClick={() => goTo(addDays(monday, 7))} aria-label={t("week.next")}><ChevronRight size={18} /></button>
+      </div>
+      <div className="week-sub">
+        <span className="muted">{range.formatRange(monday, addDays(monday, 6))}</span>
         {params.has("week") && <button className="btn-ghost" onClick={() => goTo(new Date())}>{t("week.thisWeek")}</button>}
       </div>
 
@@ -177,8 +189,12 @@ export default function Week() {
                     <div className="day-row-title">
                       <span className="chore-title">{chore.name}</span>
                       {chore.weeklyTarget != null && (
-                        <span className={`muted${myDone >= chore.weeklyTarget ? " reached" : ""}`}>
-                          {t("week.myWeek", { done: myDone, target: chore.weeklyTarget })}
+                        // The sheet's "×3" as three dots, filled as I do them.
+                        <span className="quota" role="img" style={inkStyle(me.id)}
+                          aria-label={t("week.myWeek", { done: myDone, target: chore.weeklyTarget })}
+                          title={t("week.myWeek", { done: myDone, target: chore.weeklyTarget })}>
+                          {Array.from({ length: chore.weeklyTarget }, (_, i) => <span key={i} className={i < myDone ? "on" : undefined} />)}
+                          {myDone > chore.weeklyTarget && <span className="quota-extra">+{myDone - chore.weeklyTarget}</span>}
                         </span>
                       )}
                     </div>

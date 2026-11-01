@@ -13,8 +13,19 @@ export function memberLabels(members: HouseholdMember[]): Map<number, string> {
   ]));
 }
 
-const PALETTE = ["#2a6f97", "#b5523b", "#5a8f3d", "#8e5ba8", "#c08a1e", "#3d8f8a", "#a8456b", "#5c6b7a"];
+// The three print inks, then what two of them make overprinted, each with the colour its letters are set in.
+export interface MemberColor { ink: string; on: string }
+const PALETTE: MemberColor[] = [
+  { ink: "#e6007a", on: "#ffffff" }, // pink
+  { ink: "#0a6cf0", on: "#ffffff" }, // blue
+  { ink: "#ffd23f", on: "#1b2140" }, // yellow
+  { ink: "#6b2fd0", on: "#ffffff" }, // pink over blue
+  { ink: "#00875a", on: "#ffffff" }, // blue over yellow
+  { ink: "#ff5a36", on: "#1b2140" }, // pink over yellow
+  { ink: "#1b2140", on: "#ffffff" },
+  { ink: "#0e8a9a", on: "#ffffff" },
+];
 
-export function memberColors(members: HouseholdMember[]): Map<number, string> {
+export function memberColors(members: HouseholdMember[]): Map<number, MemberColor> {
   return new Map([...members].sort((a, b) => a.id - b.id).map((m, i) => [m.id, PALETTE[i % PALETTE.length]]));
 }
