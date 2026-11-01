@@ -40,9 +40,12 @@
     "done": "klar",
     "add": "Planera",
     "addDone": "Lägg till som gjord",
+    "doneShort": "Klar",
+    "myWeek": "din vecka {{done}}/{{target}}",
     "remove": "Ta bort",
     "markDone": "Markera som klar",
-    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. På en dag som har varit lägger + in sysslan som gjord direkt."
+    "legend": "Tryck på + för att planera in dig. Tryck på din bokstav när det är gjort. På en dag som har varit lägger + in sysslan som gjord direkt.",
+    "legendDay": "Planera tar sysslan den dagen, Klar bockar av den. På en dag som har varit lägger Klar in den som gjord direkt."
   },
   "summary": {
     "title": "Summering",
