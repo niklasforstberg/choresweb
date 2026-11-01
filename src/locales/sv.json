@@ -90,7 +90,11 @@
     "newPassword": "Nytt lösenord",
     "repeatPassword": "Upprepa nytt lösenord",
     "passwordMismatch": "Lösenorden stämmer inte överens.",
-    "passwordChanged": "Lösenordet är bytt."
+    "passwordChanged": "Lösenordet är bytt.",
+    "color": "Din färg",
+    "colorHelp": "Dina pass och prickar visas i den här färgen för alla i hushållet. Färger som någon annan har går inte att välja.",
+    "colorTaken": "{{color}}, används av {{name}}",
+    "colorAuto": "Välj automatiskt"
   },
   "landing": {
     "title": "Sysslorna, utan lappen på kylskåpet.",
@@ -114,5 +118,15 @@
     "inviteText": "Den som skapar hushållet får en kod på åtta tecken. Resten går med på en minut.",
     "inviteExample": "Exempel på inbjudningskod",
     "closingTitle": "Lappen kan gå i pension."
+  },
+  "colors": {
+    "pink": "Rosa",
+    "blue": "Blå",
+    "yellow": "Gul",
+    "purple": "Lila",
+    "green": "Grön",
+    "orange": "Orange",
+    "navy": "Marinblå",
+    "teal": "Blågrön"
   }
 }

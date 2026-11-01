@@ -14,18 +14,35 @@ export function memberLabels(members: HouseholdMember[]): Map<number, string> {
 }
 
 // The three print inks, then what two of them make overprinted, each with the colour its letters are set in.
+// The keys are what the API stores as a member's chosen colour.
 export interface MemberColor { ink: string; on: string }
-const PALETTE: MemberColor[] = [
-  { ink: "#e6007a", on: "#ffffff" }, // pink
-  { ink: "#0a6cf0", on: "#ffffff" }, // blue
-  { ink: "#ffd23f", on: "#1b2140" }, // yellow
-  { ink: "#6b2fd0", on: "#ffffff" }, // pink over blue
-  { ink: "#00875a", on: "#ffffff" }, // blue over yellow
-  { ink: "#ff5a36", on: "#1b2140" }, // pink over yellow
-  { ink: "#1b2140", on: "#ffffff" },
-  { ink: "#0e8a9a", on: "#ffffff" },
-];
+export const PALETTE: Record<string, MemberColor> = {
+  pink:   { ink: "#e6007a", on: "#ffffff" },
+  blue:   { ink: "#0a6cf0", on: "#ffffff" },
+  yellow: { ink: "#ffd23f", on: "#1b2140" },
+  purple: { ink: "#6b2fd0", on: "#ffffff" }, // pink over blue
+  green:  { ink: "#00875a", on: "#ffffff" }, // blue over yellow
+  orange: { ink: "#ff5a36", on: "#1b2140" }, // pink over yellow
+  navy:   { ink: "#1b2140", on: "#ffffff" },
+  teal:   { ink: "#0e8a9a", on: "#ffffff" },
+};
+
+// Members keep the colour they chose. The rest keep their place in the palette, by joining order,
+// and only move on to a free colour when someone has chosen theirs; so one member choosing
+// doesn't shuffle everyone else.
+export function memberColorKeys(members: HouseholdMember[]): Map<number, string> {
+  const keys = Object.keys(PALETTE);
+  const chosen = (m: HouseholdMember) => (m.color != null && m.color in PALETTE ? m.color : null);
+  const used = new Set(members.map(chosen).filter(c => c != null));
+  return new Map([...members].sort((a, b) => a.id - b.id).map((m, i) => {
+    const own = chosen(m);
+    if (own) return [m.id, own];
+    const key = [keys[i % keys.length], ...keys].find(k => !used.has(k)) ?? keys[i % keys.length];
+    used.add(key);
+    return [m.id, key];
+  }));
+}
 
 export function memberColors(members: HouseholdMember[]): Map<number, MemberColor> {
-  return new Map([...members].sort((a, b) => a.id - b.id).map((m, i) => [m.id, PALETTE[i % PALETTE.length]]));
+  return new Map([...memberColorKeys(members)].map(([id, key]) => [id, PALETTE[key]]));
 }

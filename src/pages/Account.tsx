@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { changePassword, getMe, updateProfile, type UserMe } from "../api/users";
+import { Check } from "lucide-react";
+import { changePassword, getMe, updateColor, updateProfile, type UserMe } from "../api/users";
+import { getHousehold } from "../api/household";
+import { PALETTE, memberColorKeys, memberLabels } from "../lib/members";
 
 function ProfileForm({ me }: { me: UserMe }) {
   const { t } = useTranslation();
@@ -86,6 +89,60 @@ function PasswordForm() {
   );
 }
 
+// A colour shown for someone else, chosen or handed out, isn't offered: picking it would change theirs.
+function ColorPicker({ me }: { me: UserMe }) {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const { data: household } = useQuery({ queryKey: ["household"], queryFn: getHousehold, enabled: me.householdId != null });
+  const save = useMutation({
+    mutationFn: updateColor,
+    onSuccess: updated => {
+      queryClient.setQueryData(["me"], updated);
+      queryClient.invalidateQueries({ queryKey: ["household"] });
+    },
+  });
+
+  const members = household?.members ?? [];
+  const keys = memberColorKeys(members);
+  const labels = memberLabels(members);
+  const current = keys.get(me.id) ?? me.color;
+  const owners = new Map(members.filter(m => m.id !== me.id).map(m => [keys.get(m.id)!, m]));
+
+  return (
+    <section className="card stack">
+      <h2>{t("account.color")}</h2>
+      <p className="muted">{t("account.colorHelp")}</p>
+      <div className="swatches" role="radiogroup" aria-label={t("account.color")}>
+        {Object.entries(PALETTE).map(([key, c]) => {
+          const owner = owners.get(key);
+          return (
+            <button
+              key={key}
+              type="button"
+              role="radio"
+              aria-checked={current === key}
+              className={`swatch${current === key ? " current" : ""}`}
+              style={{ background: c.ink, color: c.on }}
+              disabled={owner != null || save.isPending}
+              aria-label={owner ? t("account.colorTaken", { color: t(`colors.${key}`), name: owner.name }) : t(`colors.${key}`)}
+              title={owner ? t("account.colorTaken", { color: t(`colors.${key}`), name: owner.name }) : t(`colors.${key}`)}
+              onClick={() => save.mutate(key)}
+            >
+              {current === key ? <Check size={20} /> : owner && labels.get(owner.id)}
+            </button>
+          );
+        })}
+      </div>
+      {me.color && (
+        <button className="btn-ghost swatch-auto" type="button" onClick={() => save.mutate(null)} disabled={save.isPending}>
+          {t("account.colorAuto")}
+        </button>
+      )}
+      {save.error && <p className="error">{save.error.message}</p>}
+    </section>
+  );
+}
+
 export default function Account() {
   const { t } = useTranslation();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: getMe });
@@ -97,6 +154,7 @@ export default function Account() {
       <h1>{t("menu.account")}</h1>
       <div className="cards">
         <ProfileForm me={me} />
+        <ColorPicker me={me} />
         <PasswordForm />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { apiFetch } from "./client";
 export interface HouseholdMember {
   id: number;
   name: string;
+  color: string | null;
 }
 
 export interface Household {

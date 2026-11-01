@@ -90,7 +90,11 @@
     "newPassword": "New password",
     "repeatPassword": "Repeat new password",
     "passwordMismatch": "The passwords don't match.",
-    "passwordChanged": "Your password has been changed."
+    "passwordChanged": "Your password has been changed.",
+    "color": "Your colour",
+    "colorHelp": "Your entries and dots show in this colour for everyone in the household. Colours someone else has can't be picked.",
+    "colorTaken": "{{color}}, used by {{name}}",
+    "colorAuto": "Pick automatically"
   },
   "landing": {
     "title": "Chores, without the sheet on the fridge.",
@@ -114,5 +118,15 @@
     "inviteText": "Whoever creates the household gets an eight-character code. Everyone else joins in a minute.",
     "inviteExample": "Example invite code",
     "closingTitle": "The sheet on the fridge can retire."
+  },
+  "colors": {
+    "pink": "Pink",
+    "blue": "Blue",
+    "yellow": "Yellow",
+    "purple": "Purple",
+    "green": "Green",
+    "orange": "Orange",
+    "navy": "Navy",
+    "teal": "Teal"
   }
 }
