@@ -18,8 +18,9 @@ export interface ChoreDayEntry {
 }
 
 // Any member may record a chore as done by another, so recordedById can differ from userId.
+// It is null once the recorder has deleted their account.
 export interface ChoreCompletion extends ChoreDayEntry {
-  recordedById: number;
+  recordedById: number | null;
 }
 
 export const getChores = (): Promise<Chore[]> => apiFetch("/api/chores");

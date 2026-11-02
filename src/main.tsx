@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "@fontsource-variable/familjen-grotesk"; // served with the app, so visitors' IPs don't go to Google
 import "./styles/global.css";
 import "./i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

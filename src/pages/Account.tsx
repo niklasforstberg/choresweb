@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react";
-import { changePassword, getMe, updateColor, updateProfile, type UserMe } from "../api/users";
+import { changePassword, deleteAccount, getMe, updateColor, updateProfile, type UserMe } from "../api/users";
+import { clearToken } from "../api/client";
 import { getHousehold } from "../api/household";
 import { PALETTE, memberColorKeys, memberLabels } from "../lib/members";
 
@@ -143,6 +144,41 @@ function ColorPicker({ me }: { me: UserMe }) {
   );
 }
 
+function DeleteAccount() {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState("");
+  const remove = useMutation({
+    mutationFn: () => deleteAccount(password),
+    onSuccess: () => { clearToken(); window.location.href = "/"; },
+  });
+
+  return (
+    <section className="card stack">
+      <h2>{t("account.deleteTitle")}</h2>
+      <p className="muted">{t("account.deleteText")}</p>
+      {open ? (
+        <form className="stack" onSubmit={e => { e.preventDefault(); remove.mutate(); }}>
+          <label>
+            {t("account.deletePassword")}
+            <input type="password" autoComplete="current-password" value={password}
+              onChange={e => { setPassword(e.target.value); remove.reset(); }} required autoFocus />
+          </label>
+          {remove.error && <p className="error">{remove.error.message}</p>}
+          <div className="row-actions">
+            <button className="btn-danger" type="submit" disabled={remove.isPending}>{t("account.deleteConfirm")}</button>
+            <button className="btn-ghost" type="button" onClick={() => { setOpen(false); setPassword(""); remove.reset(); }}>
+              {t("account.deleteCancel")}
+            </button>
+          </div>
+        </form>
+      ) : (
+        <button className="btn-ghost delete-open" type="button" onClick={() => setOpen(true)}>{t("account.deleteTitle")}</button>
+      )}
+    </section>
+  );
+}
+
 export default function Account() {
   const { t } = useTranslation();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: getMe });
@@ -156,6 +192,7 @@ export default function Account() {
         <ProfileForm me={me} />
         <ColorPicker me={me} />
         <PasswordForm />
+        <DeleteAccount />
       </div>
     </div>
   );

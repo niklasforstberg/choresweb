@@ -17,5 +17,8 @@ export const updateProfile = (req: { name: string; email: string; currentPasswor
 export const updateColor = (color: string | null): Promise<UserMe> =>
   apiFetch("/api/users/me/color", { method: "PUT", body: JSON.stringify({ color }) });
 
+export const deleteAccount = (password: string): Promise<void> =>
+  apiFetch("/api/users/me", { method: "DELETE", body: JSON.stringify({ password }) });
+
 export const changePassword = (currentPassword: string, newPassword: string): Promise<void> =>
   apiFetch("/api/users/me/password", { method: "PUT", body: JSON.stringify({ currentPassword, newPassword }) });

@@ -94,7 +94,12 @@
     "color": "Your colour",
     "colorHelp": "Your entries and dots show in this colour for everyone in the household. Colours someone else has can't be picked.",
     "colorTaken": "{{color}}, used by {{name}}",
-    "colorAuto": "Pick automatically"
+    "colorAuto": "Pick automatically",
+    "deleteTitle": "Delete account",
+    "deleteText": "Your account, your planned and done chores and your colour are removed for good. Chores you marked done for others stay, without your name. If you are the last one in the household, the household and its chores are deleted too.",
+    "deletePassword": "Password",
+    "deleteConfirm": "Delete account for good",
+    "deleteCancel": "Cancel"
   },
   "landing": {
     "title": "Chores, without the sheet on the fridge.",

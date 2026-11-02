@@ -94,7 +94,12 @@
     "color": "Din färg",
     "colorHelp": "Dina pass och prickar visas i den här färgen för alla i hushållet. Färger som någon annan har går inte att välja.",
     "colorTaken": "{{color}}, används av {{name}}",
-    "colorAuto": "Välj automatiskt"
+    "colorAuto": "Välj automatiskt",
+    "deleteTitle": "Radera kontot",
+    "deleteText": "Ditt konto, dina planerade och gjorda pass och din färg tas bort för gott. Pass du har markerat åt andra finns kvar, utan ditt namn. Är du den sista i hushållet raderas hushållet och dess sysslor också.",
+    "deletePassword": "Lösenord",
+    "deleteConfirm": "Radera kontot för gott",
+    "deleteCancel": "Avbryt"
   },
   "landing": {
     "title": "Sysslorna, utan lappen på kylskåpet.",

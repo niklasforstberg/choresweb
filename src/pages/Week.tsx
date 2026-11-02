@@ -102,14 +102,14 @@ export default function Week() {
     );
   };
   const completionChip = (e: ChoreCompletion) => {
-    const byOther = e.recordedById !== e.userId;
-    const recordedBy = names.get(e.recordedById) ?? "?";
+    const byOther = e.recordedById != null && e.recordedById !== e.userId;
+    const recordedBy = (e.recordedById != null && names.get(e.recordedById)) || "?";
     return (
       <span key={`done-${e.id}`} className={`chip done${e.id === stamped ? " stamp" : ""}`} style={inkStyle(e.userId)}
         title={`${names.get(e.userId)} – ${t("week.done")}${byOther ? `, ${t("week.markedBy", { name: recordedBy })}` : ""}`}>
         <span className="chip-main">
           {labels.get(e.userId)}<Check size={12} />
-          {byOther && <span className="chip-by">{t("week.by", { label: labels.get(e.recordedById) ?? "?" })}</span>}
+          {byOther && <span className="chip-by">{t("week.by", { label: (e.recordedById != null && labels.get(e.recordedById)) || "?" })}</span>}
         </span>
         {(e.userId === me.id || e.recordedById === me.id) && (
           <button className="chip-remove" onClick={() => uncomplete.mutate(e)} aria-label={t("week.remove")}><X size={12} /></button>

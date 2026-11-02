@@ -16,7 +16,7 @@
   --blend:   multiply; /* inks darken where they overlap, as on paper */
   --today-selected: var(--sun); /* today's date on the selected (ink) day tab */
 
-  --f-body: "Familjen Grotesk", system-ui, sans-serif;
+  --f-body: "Familjen Grotesk Variable", system-ui, sans-serif;
 
   /* 1.25 scale */
   --t-s:  .8rem;
@@ -477,3 +477,15 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .swatch:disabled { cursor: default; }
 .swatch:disabled:not(.current) { opacity: .4; }
 .swatch-auto { align-self: flex-start; }
+
+.delete-open { align-self: flex-start; border-color: var(--error); color: var(--error); }
+.btn-danger {
+  min-height: 44px;
+  padding: 0 20px;
+  background: var(--error);
+  color: var(--sheet); /* white on light paper, dark on dark, where the error ink is pale */
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.btn-danger:disabled { opacity: .55; cursor: default; }
