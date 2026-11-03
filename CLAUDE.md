@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is this
 
-The React SPA for Chores (household chores — who did what, when). The API lives in `../choresapi`; see its CLAUDE.md for the backend and deployment as a whole. Structure follows Mynt's `clientapp/` (`../Mynt/clientapp`).
+The React SPA for Chores (household chores — who did what, when). The API lives in `../choresapi`; see its CLAUDE.md for the backend and deployment as a whole. The iOS app in `../choresios` mirrors this one's phone layout, so UI and behaviour changes usually belong there too. Structure follows Mynt's `clientapp/` (`../Mynt/clientapp`).
 
 **The two repos are one project.** A change in `src/api/` usually needs the matching endpoint or DTO change in `../choresapi` (and the reverse), so read and edit both without being asked.
 
