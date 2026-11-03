@@ -137,10 +137,7 @@ export default function Week() {
     <div className="stack">
       <div className="week-header">
         <button className="btn-icon" onClick={() => goTo(addDays(monday, -7))} aria-label={t("week.previous")}><ChevronLeft size={18} /></button>
-        <h1 className="week-title" aria-label={t("week.title", { number: isoWeekNumber(monday) })}>
-          <span className="week-label" aria-hidden="true">{t("nav.week")}</span>
-          <span className="week-number" data-n={isoWeekNumber(monday)} aria-hidden="true">{isoWeekNumber(monday)}</span>
-        </h1>
+        <h1 className="week-title">{t("week.title", { number: isoWeekNumber(monday) })}</h1>
         <button className="btn-icon" onClick={() => goTo(addDays(monday, 7))} aria-label={t("week.next")}><ChevronRight size={18} /></button>
       </div>
       <div className="week-sub">

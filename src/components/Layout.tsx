@@ -14,7 +14,7 @@ export default function Layout() {
   return (
     <div className="layout">
       <header className="layout-header">
-        <span className="brand">{t("common.appName")}</span>
+        <span className="brand wordmark" data-text={t("common.appName")}>{t("common.appName")}</span>
         {me?.householdId != null && (
           <nav className="nav">
             <NavLink to="/" end><NotebookPen size={20} aria-hidden="true" />{t("nav.week")}</NavLink>

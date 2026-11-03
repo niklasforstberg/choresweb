@@ -148,7 +148,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
   margin: 0 auto;
   padding: 16px;
 }
-.brand { font-weight: 700; font-size: var(--t-l); letter-spacing: -.03em; margin-right: auto; }
+.brand { position: relative; font-weight: 700; font-size: var(--t-xl); letter-spacing: -.05em; color: var(--pink); margin-right: auto; }
 .layout-main { max-width: 1040px; margin: 0 auto; padding: 8px 16px 48px; }
 
 .nav { display: flex; gap: 4px; order: 0; }
@@ -257,29 +257,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 }
 
 /* ─── WEEK HEADER ─────────────────────────────────────────────────────── */
-/* The one loud thing: the week number printed in two inks, a little off register. */
-.week-header { display: flex; align-items: flex-end; gap: 12px; }
-.week-header .btn-icon { margin-bottom: 14px; }
-.week-title { display: flex; flex-direction: column; margin-right: auto; }
-.week-label { font-size: var(--t-l); font-weight: 600; letter-spacing: -.01em; margin-bottom: -.2em; }
-.week-number {
-  position: relative;
-  font-size: clamp(5.5rem, 26vw, 9rem);
-  font-weight: 700;
-  line-height: .85;
-  letter-spacing: -.06em;
-  font-variant-numeric: tabular-nums;
-  color: var(--pink);
-  mix-blend-mode: var(--blend);
-}
-.week-number::after {
-  content: attr(data-n);
-  position: absolute;
-  left: .035em;
-  top: .03em;
-  color: var(--blue);
-  mix-blend-mode: var(--blend);
-}
+.week-header { display: flex; align-items: center; gap: 12px; }
+.week-title { margin-right: auto; }
 .week-header .btn-icon:first-child { order: 2; }
 .week-header .btn-icon:last-child { order: 3; }
 
